@@ -13,7 +13,7 @@ git clone https://github.com/DewaTriWijaya/web_admin_laundry.git
 
 ### Cek Koneksi Remote
 ```bash
-bash git remote -v
+git remote -v
 ```
 ### jika tampilannya seperti ini maka sudah terkoneksi
 ![image](https://github.com/user-attachments/assets/34277a95-0e70-4f3a-8f21-31905dbbd724)
