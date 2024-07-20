@@ -34,6 +34,11 @@ git branch
 git checkout namaBranch
 ```
 
+### Pull
+```bash
+git pull origin namaBranch
+```
+
 ### Commit
 ```bash
 git add .
