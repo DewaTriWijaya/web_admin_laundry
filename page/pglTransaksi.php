@@ -12,7 +12,7 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Pengelolaan Transaksi</h1>
+    <h1>halaman Pengelolaan Transaksi</h1>
     <script src="../js/bootstrap.min.js"></script>
 </body>
 </html>
