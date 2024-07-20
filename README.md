@@ -23,11 +23,11 @@ git remote -v
 ```bash
 git branch namaBranch
 ```
-
 ### Cek Daftar Branch dan lokasi saat ini
 ```bash
-git branch
+git branch -a
 ```
+
 
 ### Pilih Branch
 ```bash
