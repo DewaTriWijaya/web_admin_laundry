@@ -24,7 +24,7 @@ git remote -v
 git branch namaBranch
 ```
 
-### Cek Daftar Branch
+### Cek Daftar Branch dan lokasi saat ini
 ```bash
 git branch
 ```
