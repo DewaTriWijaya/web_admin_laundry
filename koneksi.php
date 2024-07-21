@@ -1,5 +1,6 @@
 <?php
-$servername = "localhost";
+$servername = "127.0.0.1:3307"; //Khusus Faris
+// $servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "admin_laundry";
