@@ -1,14 +1,17 @@
 <?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "admin_laundry";
 
-// $localhost = "localhost";
-// $username = 'root';
-// $password = '';
-// $database = 'namaDatabase';
+// ini cuma ubuntu (hapus(null, socket))
+$socket = "/opt/lampp/var/mysql/mysql.sock";
 
-// $conn = mysqli_connect($localhost, $username, $password, $database);
+// Membuat koneksi ke database
+$conn = new mysqli($servername, $username, $password, $dbname, null, $socket);
 
-
-// if($conn->connect_error){
-//     die("Koneksi Gagal ". $conn->connect_error);
-// }
+// Mengecek koneksi
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 ?>
