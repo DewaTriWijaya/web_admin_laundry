@@ -28,36 +28,36 @@
             <div class="mt-5" >
                 <div class="side-menu" onclick="window.location.href='index.php?page=home'">
                     <img src="img/dashboard.png" alt="beranda">
-                    <a class="text-white" href="index.php?page=home">Beranda</a>
+                    <a class="text-white" href="index.php?page=home" style="text-decoration:none">Beranda</a>
                 </div>
                 <div class="side-menu" onclick="window.location.href='index.php?page=pendaftaran'">
                     <img src="img/user.png" alt="pendaftaran">
-                    <a class="text-white" href="index.php?page=pendaftaran">Pendaftaran</a>
+                    <a class="text-white" href="index.php?page=pendaftaran" style="text-decoration:none">Pendaftaran</a>
                 </div>
 
                 <div class="side-menu d-flex align-items-center" onclick="document.querySelector('#transaksi-link').click()">
                     <img src="img/transaksi.png" alt="transaksi" class="me-2">
-                    <a id="transaksi-link" data-bs-toggle="collapse" href="#transaksiEx" role="button" aria-expanded="false" aria-controls="transaksiEx" class="text-white">Transaksi</a>
+                    <a id="transaksi-link" data-bs-toggle="collapse" href="#transaksiEx" role="button" aria-expanded="false" aria-controls="transaksiEx" class="text-white" style="text-decoration:none">Transaksi</a>
                 </div>
                     <div class="collapse" id="transaksiEx">
                         <div class="submenu">
                             <div class="side-menu" onclick="window.location.href='index.php?page=pendaftaran'">
                             <img src="img/notebook.png" alt="pendaftaran">
-                            <a class="text-white" href="index.php?page=pglTransaksi">Pengelolaan Transaksi</a>
+                            <a class="text-white" href="index.php?page=pglTransaksi" style="text-decoration:none">Pengelolaan Transaksi</a>
                         </div>
                             <div class="submenu-item side-menu d-flex align-items-center" onclick="window.location.href='index.php?page=sub2'">
                             <img src="img/washing.png" alt="pendaftaran">
-                            <a class="text-white" href="index.php?page=pglCucian">Pengelolaan Cucian</a>
+                            <a class="text-white" href="index.php?page=pglCucian" style="text-decoration:none">Pengelolaan Cucian</a>
                             </div>
                         </div>
                     </div>
                 <div class="side-menu" onclick="window.location.href='index.php?page=laporan'">
                     <img src="img/bar-chart.png" alt="laporan">
-                    <a class="text-white" href="index.php?page=laporan">Laporan</a>
+                    <a class="text-white" href="index.php?page=laporan" style="text-decoration:none">Laporan</a>
                 </div>
                 <div class="side-menu" onclick="window.location.href='index.php?page=statusLaundry'">
                     <img src="img/bell.png" alt="status">
-                    <a class="text-white" href="index.php?page=statusLaundry">Status Laundry</a>
+                    <a class="text-white" href="index.php?page=statusLaundry" style="text-decoration:none">Status Laundry</a>
                 </div>
             </div>
         </div>

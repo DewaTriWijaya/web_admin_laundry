@@ -54,7 +54,7 @@
                 </table>
             </div>
             <div class="d-flex justify-content-end">
-                <button type="button" class="btn btn-success">Simpan</button>
+                <button type="button" class="btn btn-success px-4">Simpan</button>
             </div>
         </div>
     </div>
