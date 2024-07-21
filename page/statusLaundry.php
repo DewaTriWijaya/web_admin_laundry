@@ -1,6 +1,21 @@
 <?php
-// include "../koneksi.php";
-// Status
+include "koneksi.php";
+
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
+$sql = "SELECT * FROM status_laundry";
+$result = mysqli_query($conn, $sql);
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    foreach ($_POST['No_Nota'] as $index => $no_nota) {
+        $tanggal_selesai = $_POST['tanggal_selesai'][$index];
+        $sql = "UPDATE status_laundry SET tanggal_selesai='$tanggal_selesai' WHERE No_Nota='$no_nota'";
+        mysqli_query($conn, $sql);
+    }
+    header("Location: statusLaundry.php"); // Refresh halaman setelah update
+}
 
 ?>
 
@@ -19,119 +34,38 @@
     <div class="container">
         <div class="row">
             <h2 class="fw-bold mb-5">Informasi Status Laundry</h2>
-            <div class="d-flex justify-content-center">
-                <table class="table table-borderless">
-                    <thead class="text-center">
-                        <tr>
-                            <th scope="col">No. Nota</th>
-                            <th scope="col">Tanggal Selesai</th>
-                            <th scope="col">Status Laundry</th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-light">
-                        <tr>
-                            <td scope="row" class="text-center">0112</td>
-                            <td>
-                                <input type="date" class="form-control">
-                            </td>
-                            <td>
-                                <div class="dropdown text-center">
-                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        Status Laundry
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="#">Belum</a></li>
-                                        <li><a class="dropdown-item" href="#">Selesai</a></li>
-                                    </ul>
-                                </div>
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-primary">Pemberitahuan</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="d-flex justify-content-end">
-                <button type="button" class="btn btn-success px-4">Simpan</button>
+            <div class="justify-content-center">
+            <form method="POST" action="statusLaundry.php">
+                    <table class="table table-borderless">
+                        <thead class="text-center">
+                            <tr>
+                                <th scope="col">No. Nota</th>
+                                <th scope="col">Tanggal Selesai</th>
+                                <th scope="col">Status Laundry</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-light">
+                            <?php 
+                                if (mysqli_num_rows($result) > 0) {
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                        $status = $row["status_laundry"];
+                                        echo "<tr>";
+                                        echo "<td scope='row' class='text-center'><input type='hidden' name='No_Nota[]' value='".$row['No_Nota']."'>".$row['No_Nota']."</td>";
+                                        echo "<td><input type='date' class='form-control' name='tanggal_selesai[]' value='".$row['tanggal_selesai']."'></td>";
+                                        echo "<td class='text-center'><select name='status'><option name='$status' value='$status'>$status</option></select></td>";
+                                        echo "<td><button type='button' class='btn btn-primary'>Pemberitahuan</button></td>";
+                                        echo "</tr>";
+                                    }
+                                }
+                            ?>
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" name="simpan" class="btn btn-success px-4">Simpan</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-    <!-- <div class="d-flex mb-3 row">
-        <h2 class="fw-bold">Informasi Status Laundry</h2>
-    </div>
-    <div class="d-flex flex-row justify-content-center">
-        <table class="table table-striped table-bordered">
-            <thead>
-                <tr>
-                    <th scope="col">No. Nota</th>
-                    <th scope="col">Tanggal Selesai</th>
-                    <th scope="col">Status Laundry</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th scope="row"></th>
-                    <td>
-                        <input type="date" class="form-control">
-                    </td>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Status Laundry
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Belum</a></li>
-                                <li><a class="dropdown-item" href="#">Selesai</a></li>
-                            </ul>
-                        </div>
-                    </td>
-                    <td colspan="2"><button type="button" class="btn btn-primary">Pemberitahuan</button></td>
-                </tr>
-                <tr>
-                    <th scope="row"></th>
-                    <td>
-                        <input type="date" class="form-control">
-                    </td>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Status Laundry
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Belum</a></li>
-                                <li><a class="dropdown-item" href="#">Selesai</a></li>
-                            </ul>
-                        </div>
-                    </td>
-                    <td colspan="2"><button type="button" class="btn btn-primary">Pemberitahuan</button></td>
-                </tr>
-                <tr>
-                    <th scope="row"></th>
-                    <td>
-                        <input type="date" class="form-control">
-                    </td>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Status Laundry
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Belum</a></li>
-                                <li><a class="dropdown-item" href="#">Selesai</a></li>
-                            </ul>
-                        </div>
-                    </td>
-                    <td colspan="2"><button type="button" class="btn btn-primary">Pemberitahuan</button></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="d-flex flex-row-reverse">
-        <button type="button" class="btn btn-success">Simpan</button>
-    </div> -->
-</body>
-
 </html>
