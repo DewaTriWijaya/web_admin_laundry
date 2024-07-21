@@ -7,25 +7,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 
     <title>Document</title>
 </head>
-<body>
-<div class="container">
+<body class="bg-secondary" style="--bs-bg-opacity:.15;">
+    <div class="container">
         <div class="row mb-3">
 
-            <div class="head mb-4">
-                <h1>Pengelolaan Transaksi</h1>
+            <div class="head mb-5 mt-1 ">
+                <h2 class="fw-bold">Pengelolaan Transaksi</h2>
             </div>
             
-            <div class="d-flex justify-content-start mb-4">
+            <div class="d-flex justify-content-start mb-3">
                 <div class="col">
                     <input type="text" class="form-control" placeholder="Masukan No Handphone Pelanggan">
                 </div>
                 <div class="col">
-                    <button class="btn btn btn-outline-secondary" type="button"><i class="bi bi-search"></i> Cari</button>
+                    <button class="btn btn btn-outline-dark" type="button"><i class="bi bi-search"></i> Cari</button>
                 </div>   
             </div>
             <div class="d-flex flex-row">
@@ -38,7 +37,7 @@
             </div>
             <div class="d-flex justify-content-start">
                 <table class="table mt-2 w-75">
-                    <thead class="table-light">
+                    <thead>
                         <tr>
                             <th scope="col">No</th>
                             <th scope="col">Jenis Cucian</th>
@@ -47,7 +46,7 @@
                             <th scope="col">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="table-light">
                         <tr>
                             <th scope="row">1</th>
                             <td>Mark</td>
@@ -64,21 +63,60 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col">
-                <div class="col">
-                    <div class="row">
-                        <h6><b>Tanggal Transaksi</b></h6>
-                        <div class="col-md-4">
-                            <input type="date" class="form-control">
-                        </div>
+        <div class="col">
+            <div class="row mb-4">
+                <div class="col me-4">
+                    <h6><b>Tanggal Transaksi</b></h6>
+                    <div class="col-md-7">
+                        <input type="date" class="form-control">
                     </div>
-                    
+                </div>
+                <div class="col me-4">
+                    <h6><b>Total Harga</b></h6>
+                    <div class="col-md-5">
+                        <fieldset disabled>
+                            <input type="text" id="disabledTextInput" class="form-control bg-light">
+                        </fieldset >    
+                    </div>         
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col me-4">
+                    <h6><b>Tanggal Transaksi</b></h6>
+                    <div class="col-md-7">
+                        <input type="date" class="form-control">
+                    </div>
+                </div>
+                <div class="col me-4">
+                    <h6><b>Pembayaran<b></h6>
+                    <div class="d-flex flex-row mb-3">
+                        <div class="row me-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                <p>QRIS</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                <p>Tunai</p>
+                            </div>
+                        </div>
+                    </div>         
                 </div>
             </div>
         </div>
-</div>
 
-    <script src="../js/bootstrap.min.js"></script>
+        <div class="d-flex flex-row mb-3">
+            <div class="row me-5">
+                <button type="button" class="btn btn-success p-2 px-4">Simpan</button>
+            </div>
+            <div class="row ms-3">
+                <button type="button" class="btn btn-danger p-2 px-4">Hapus</button>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
