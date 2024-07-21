@@ -19,7 +19,7 @@
     <div class="container">
         <div class="row">
             <h2 class="fw-bold mb-5">Informasi Status Laundry</h2>
-            <div class="d-flex justify-content-center">
+            <div class="d-flex">
                 <table class="table table-borderless">
                     <thead class="text-center">
                         <tr>
@@ -29,14 +29,14 @@
                             <th scope="col"></th>
                         </tr>
                     </thead>
-                    <tbody class="table-light">
+                    <tbody class="table-light text-center">
                         <tr>
-                            <td scope="row" class="text-center">0112</td>
+                            <td scope="row">0112</td>
                             <td>
                                 <input type="date" class="form-control">
                             </td>
-                            <td>
-                                <div class="dropdown text-center">
+                            <td scope="row">
+                                <div class="dropdown">
                                     <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         Status Laundry
                                     </button>
@@ -46,7 +46,7 @@
                                     </ul>
                                 </div>
                             </td>
-                            <td>
+                            <td scope="row" class="d-flex justify-content start">
                                 <button type="button" class="btn btn-primary">Pemberitahuan</button>
                             </td>
                         </tr>
@@ -54,7 +54,7 @@
                 </table>
             </div>
             <div class="d-flex justify-content-end">
-                <button type="button" class="btn btn-success">Simpan</button>
+                <button type="button" class="btn btn-success px-4">Simpan</button>
             </div>
         </div>
     </div>
