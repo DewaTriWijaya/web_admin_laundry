@@ -1,5 +1,12 @@
 <?php
-include "koneksi.php"; // Ensure this file establishes the $conn variable
+include "koneksi.php";
+
+// Function to generate the ID
+function generateId($jenisCucian) {
+    $prefix = strtoupper(substr($jenisCucian, 0, 2)); // Get the first two letters and convert to uppercase
+    $randomNumber = rand(10, 99); // Generate a random two-digit number
+    return $prefix . $randomNumber;
+}
 
 // Check if connection was successful
 if (!$conn) {
@@ -13,23 +20,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Validate and sanitize inputs
     $jenisCucian = htmlspecialchars($jenisCucian);
-    $hargaCucian = (int) $hargaCucian;
+    $hargaCucian = filter_var($hargaCucian, FILTER_VALIDATE_INT);
 
-    // Menggunakan prepared statement untuk menghindari SQL injection
-    $stmt = $conn->prepare("INSERT INTO DataJenisCucian (jenis_cucian, harga) VALUES (?, ?)");
-    $stmt->bind_param("si", $jenisCucian, $hargaCucian);
-
-    if ($stmt->execute()) {
-        echo "<div class='alert alert-success' role='alert'>Jenis cucian baru berhasil ditambahkan.</div>";
+    if ($hargaCucian === false) {
+        echo "<div class='alert alert-danger' role='alert'>Harga cucian tidak valid.</div>";
     } else {
-        echo "<div class='alert alert-danger' role='alert'>Error: " . $stmt->error . "</div>";
-    }
+        $idJenisCucian = generateId($jenisCucian);
 
-    $stmt->close();
+        // Menggunakan prepared statement untuk menghindari SQL injection
+        $stmt = $conn->prepare("INSERT INTO Jenis_Cucian (id_jenis_cucian, jenis_cucian, harga) VALUES (?, ?, ?)");
+        $stmt->bind_param("ssi", $idJenisCucian, $jenisCucian, $hargaCucian);
+
+        if ($stmt->execute()) {
+            echo "<div class='alert alert-success' role='alert'>Jenis cucian baru berhasil ditambahkan.</div>";
+        } else {
+            echo "<div class='alert alert-danger' role='alert'>Error: " . $stmt->error . "</div>";
+        }
+
+        $stmt->close();
+    }
 }
 
 // Mendapatkan data jenis cucian dari database
-$sql = "SELECT * FROM DataJenisCucian";
+$sql = "SELECT * FROM Jenis_Cucian";
 $result = mysqli_query($conn, $sql);
 ?>
 
