@@ -41,6 +41,50 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
+// Handle form submission for deleting a jenis cucian
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete'])) {
+    $idJenisCucian = $_POST['idJenisCucian'];
+
+    // Use prepared statement to prevent SQL injection
+    $stmt = $conn->prepare("DELETE FROM Jenis_Cucian WHERE id_jenis_cucian = ?");
+    $stmt->bind_param("s", $idJenisCucian);
+
+    if ($stmt->execute()) {
+        echo "<div class='alert alert-success' role='alert'>Jenis cucian berhasil dihapus.</div>";
+    } else {
+        echo "<div class='alert alert-danger' role='alert'>Error: " . $stmt->error . "</div>";
+    }
+
+    $stmt->close();
+}
+
+// Handle form submission for editing a jenis cucian
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit'])) {
+    $idJenisCucian = $_POST['idJenisCucian'];
+    $jenisCucian = $_POST['editJenisCucian'];
+    $hargaCucian = $_POST['editHargaCucian'];
+
+    // Validate and sanitize inputs
+    $jenisCucian = htmlspecialchars($jenisCucian);
+    $hargaCucian = filter_var($hargaCucian, FILTER_VALIDATE_INT);
+
+    if ($hargaCucian === false) {
+        echo "<div class='alert alert-danger' role='alert'>Harga cucian tidak valid.</div>";
+    } else {
+        // Use prepared statement to prevent SQL injection
+        $stmt = $conn->prepare("UPDATE Jenis_Cucian SET jenis_cucian = ?, harga = ? WHERE id_jenis_cucian = ?");
+        $stmt->bind_param("sis", $jenisCucian, $hargaCucian, $idJenisCucian);
+
+        if ($stmt->execute()) {
+            echo "<div class='alert alert-success' role='alert'>Jenis cucian berhasil diupdate.</div>";
+        } else {
+            echo "<div class='alert alert-danger' role='alert'>Error: " . $stmt->error . "</div>";
+        }
+
+        $stmt->close();
+    }
+}
+
 // Mendapatkan data jenis cucian dari database
 $sql = "SELECT * FROM Jenis_Cucian";
 $result = mysqli_query($conn, $sql);
@@ -88,11 +132,14 @@ $result = mysqli_query($conn, $sql);
                         echo "<td>" . $no . "</td>";
                         echo "<td>" . htmlspecialchars($row['jenis_cucian']) . "</td>";
                         echo "<td>Rp. " . number_format($row['harga'], 0, ',', '.') . "</td>";
-                        echo '<td>
-                                <button class="btn" type="button">
-                                    <i class="bi bi-trash text-danger"></i>
-                                </button>
-                                <button class="btn">
+                         echo '<td>
+                                <form method="POST" action="" style="display:inline-block;">
+                                    <input type="hidden" name="idJenisCucian" value="' . htmlspecialchars($row['id_jenis_cucian']) . '">
+                                    <button type="submit" name="delete" class="btn btn-link p-0">
+                                        <i class="bi bi-trash text-danger"></i>
+                                    </button>
+                                </form>
+                                <button class="btn" type="button" data-bs-toggle="modal" data-bs-target="#editModal" data-id="' . htmlspecialchars($row['id_jenis_cucian']) . '" data-jenis="' . htmlspecialchars($row['jenis_cucian']) . '" data-harga="' . htmlspecialchars($row['harga']) . '">
                                     <i class="bi bi-pencil-square text-secondary"></i>
                                 </button>
                             </td>';
@@ -125,7 +172,57 @@ $result = mysqli_query($conn, $sql);
         </div>
     </div>
 
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Jenis Cucian</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="">
+                    <div class="modal-body">
+                        <input type="hidden" name="edit" value="1">
+                        <input type="hidden" name="idJenisCucian" id="editIdJenisCucian">
+                        <div class="form-group p-2">
+                            <label for="editJenisCucian">Jenis Cucian</label>
+                            <input type="text" class="form-control" id="editJenisCucian" name="editJenisCucian" placeholder="Masukan Jenis Cucian" required>
+                        </div>
+                        <div class="form-group p-2">
+                            <label for="editHargaCucian">Harga Jenis Cucian</label>
+                            <input type="number" class="form-control" id="editHargaCucian" name="editHargaCucian" placeholder="Masukan Harga Jenis Cucian" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script src="../js/bootstrap.min.js"></script>
+
+    <script>
+        var editModal = document.getElementById('editModal');
+        editModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var idJenisCucian = button.getAttribute('data-id');
+            var jenisCucian = button.getAttribute('data-jenis');
+            var hargaCucian = button.getAttribute('data-harga');
+
+            var modalTitle = editModal.querySelector('.modal-title');
+            var modalBodyInputId = editModal.querySelector('.modal-body input#editIdJenisCucian');
+            var modalBodyInputJenis = editModal.querySelector('.modal-body input#editJenisCucian');
+            var modalBodyInputHarga = editModal.querySelector('.modal-body input#editHargaCucian');
+
+            modalBodyInputId.value = idJenisCucian;
+            modalBodyInputJenis.value = jenisCucian;
+            modalBodyInputHarga.value = hargaCucian;
+        });
+    </script>
+    
 </body>
 
 </html>
