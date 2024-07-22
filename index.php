@@ -40,12 +40,12 @@
                     <a id="transaksi-link" data-bs-toggle="collapse" href="#transaksiEx" role="button" aria-expanded="false" aria-controls="transaksiEx" class="text-white" style="text-decoration:none">Transaksi</a>
                 </div>
                     <div class="collapse" id="transaksiEx">
-                        <div class="submenu">
-                            <div class="side-menu" onclick="window.location.href='index.php?page=pendaftaran'">
+                        <div class="submenu ms-4">
+                            <div class="side-menu" onclick="window.location.href='index.php?page=pglTransaksi'">
                             <img src="img/notebook.png" alt="pendaftaran">
                             <a class="text-white" href="index.php?page=pglTransaksi" style="text-decoration:none">Pengelolaan Transaksi</a>
                         </div>
-                            <div class="submenu-item side-menu d-flex align-items-center" onclick="window.location.href='index.php?page=sub2'">
+                            <div class="submenu-item side-menu d-flex align-items-center" onclick="window.location.href='index.php?page=pglCucian'">
                             <img src="img/washing.png" alt="pendaftaran">
                             <a class="text-white" href="index.php?page=pglCucian" style="text-decoration:none">Pengelolaan Cucian</a>
                             </div>
