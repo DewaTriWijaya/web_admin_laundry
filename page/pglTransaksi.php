@@ -1,5 +1,4 @@
 <?php
-session_start();
 include "koneksi.php";
 
 $showModal = false;
@@ -79,7 +78,7 @@ foreach ($_SESSION['table_data'] as $index => $data) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
-    <title>Document</title>
+    <title>Status Laundry</title>
 </head>
 <body class="bg-secondary" style="--bs-bg-opacity:.15;">
 <form method="POST" action="">
