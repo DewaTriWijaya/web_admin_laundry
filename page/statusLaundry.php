@@ -1,27 +1,33 @@
 <?php
+// Menghubungkan ke database
 include "koneksi.php";
 
+// Memeriksa apakah koneksi berhasil
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
+// Mengambil semua data dari tabel status_laundry
 $sql = "SELECT * FROM status_laundry";
 $result = mysqli_query($conn, $sql);
 
 $success = false;
 
+// Memeriksa apakah form dikirim menggunakan metode POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Mengambil data dari form
     $status_laundry = $_POST['status'];
     $No_Nota = $_POST['No_Nota'];
     $tanggal_selesai = $_POST['tanggal_selesai'];
 
-    // Prepare SQL query to update all rows
+    // Menyiapkan query SQL untuk memperbarui setiap baris
     foreach ($No_Nota as $index => $nota) {
         $status = $status_laundry[$index];
         $tanggal = $tanggal_selesai[$index];
         
         $sql = "UPDATE status_laundry SET tanggal_selesai='$tanggal', status_laundry='$status' WHERE No_Nota='$nota'";
 
+        // Menjalankan query dan memeriksa apakah berhasil
         if ($conn->query($sql) === TRUE) {
             $success = true;
         } else {
@@ -30,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
+// Menutup koneksi database
 $conn->close();
 ?>
 
@@ -40,6 +47,7 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Status Laundry</title>
     <style>
+        /* CSS untuk modal */
         .modal {
             display: none;
             position: fixed;
@@ -117,6 +125,7 @@ $conn->close();
                         </thead>
                         <tbody class="table-light">
                             <?php 
+                                // Menampilkan data dari hasil query
                                 if (mysqli_num_rows($result) > 0) {
                                     while ($row = mysqli_fetch_assoc($result)) {
                                         $status = $row["status_laundry"];
@@ -142,7 +151,7 @@ $conn->close();
         </div>
     </div>
 
-    <!-- Success Modal -->
+    <!-- Modal Sukses -->
     <div id="successModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -150,7 +159,7 @@ $conn->close();
         </div>
     </div>
 
-    <!-- Confirmation Modal -->
+    <!-- Modal Konfirmasi -->
     <div id="confirmationModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -165,14 +174,17 @@ $conn->close();
     </div>
 
     <script>
+        // Mengambil elemen modal dan tombol tutup
         var successModal = document.getElementById("successModal");
         var confirmationModal = document.getElementById("confirmationModal");
         var closeBtns = document.getElementsByClassName("close");
 
+        // Menampilkan modal sukses jika data berhasil diupdate
         <?php if ($success) { ?>
             successModal.style.display = "block";
         <?php } ?>
 
+        // Menambahkan event listener untuk tombol tutup modal
         Array.from(closeBtns).forEach(function (btn) {
             btn.onclick = function () {
                 this.parentElement.parentElement.style.display = "none";
@@ -182,6 +194,7 @@ $conn->close();
             }
         });
 
+        // Menutup modal ketika pengguna mengklik di luar modal
         window.onclick = function (event) {
             if (event.target == successModal || event.target == confirmationModal) {
                 event.target.style.display = "none";
@@ -191,10 +204,12 @@ $conn->close();
             }
         }
 
+        // Fungsi untuk menampilkan modal konfirmasi
         function showConfirmationModal() {
             confirmationModal.style.display = "block";
         }
 
+        // Mengambil elemen tombol konfirmasi
         document.getElementById("confirmYes").onclick = function () {
             confirmationModal.style.display = "none";
             alert("Informasi status telah diberitahukan kepada pelanggan.");
