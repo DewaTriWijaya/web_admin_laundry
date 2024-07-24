@@ -8,7 +8,7 @@ if (!$conn) {
 }
 
 // Mengambil semua data dari tabel status_laundry
-$sql = "SELECT * FROM status_laundry";
+$sql = "SELECT * FROM Status_Laundry";
 $result = mysqli_query($conn, $sql);
 
 $success = false;
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $status = $status_laundry[$index];
         $tanggal = $tanggal_selesai[$index];
         
-        $sql = "UPDATE status_laundry SET tanggal_selesai='$tanggal', status_laundry='$status' WHERE No_Nota='$nota'";
+        $sql = "UPDATE Status_Laundry SET tanggal_selesai='$tanggal', status_laundry='$status' WHERE No_Nota='$nota'";
 
         // Menjalankan query dan memeriksa apakah berhasil
         if ($conn->query($sql) === TRUE) {

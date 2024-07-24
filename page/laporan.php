@@ -9,10 +9,10 @@ if (isset($_POST['cari'])) {
 
     if (empty($start_date) || empty($end_date)) {
         // Query untuk mengambil semua data transaksi jika tidak ada input tanggal
-        $query = "SELECT * FROM nota";
+        $query = "SELECT * FROM Nota";
     } else {
         // Query untuk mengambil data transaksi berdasarkan jangka waktu
-        $query = "SELECT * FROM nota WHERE Tgl_masuk BETWEEN '$start_date' AND '$end_date'";
+        $query = "SELECT * FROM Nota WHERE Tgl_masuk BETWEEN '$start_date' AND '$end_date'";
     }
 
     $result = $conn->query($query);
@@ -22,7 +22,7 @@ if (isset($_POST['cari'])) {
     }
 } else {
     // Query untuk mengambil semua data transaksi
-    $query = "SELECT * FROM nota";
+    $query = "SELECT * FROM Nota";
     $result = $conn->query($query);
 
     if (!$result) {
