@@ -7,6 +7,7 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
+
 // Mengambil semua data dari tabel status_laundry
 $sql = "SELECT * FROM Status_Laundry";
 $result = mysqli_query($conn, $sql);
@@ -66,7 +67,7 @@ $conn->close();
             background-color: #fefefe;
             margin: 5% auto;
             padding: 20px;
-            width: 40%;
+            width: 20%;
             text-align: center;
             position: relative;
             border: none;
@@ -80,8 +81,9 @@ $conn->close();
         }
 
         .modal-title {
-            font-size: 18px;
+            font-size: 25px;
             font-weight: bold;
+            
         }
 
         .close {
@@ -104,7 +106,7 @@ $conn->close();
         }
 
         .modal-footer button {
-            padding: 12px 30px;
+            padding: 7px 20px;
         }
     </style>
 </head>
@@ -154,16 +156,21 @@ $conn->close();
     <!-- Modal Sukses -->
     <div id="successModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <p>Status Laundry Berhasil diubah</p>
+            <div class="modal-header justify-content-center">
+                <span class="bi bi-info-circle modal-title"> Pemberitahuan</span>
+            </div>
+            <p>Status laundry berhasil diubah</p>
+            <div class="modal-footer">
+                <button id="successClose" class="btn btn-success">Ya</button>
+            </div>
         </div>
     </div>
 
     <!-- Modal Konfirmasi -->
     <div id="confirmationModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <span class="bi bi-question-circle pr-1 modal-title">    Konfirmasi</span>
+            <div class="modal-header justify-content-center">
+                <span class="bi bi-question-circle modal-title"> Konfirmasi</span>
             </div>
             <p>Apakah anda yakin ingin memberitahu informasi status ini kepada pelanggan?</p>
             <div class="modal-footer">
@@ -183,6 +190,12 @@ $conn->close();
         <?php if ($success) { ?>
             successModal.style.display = "block";
         <?php } ?>
+
+        // Menambahkan event listener untuk tombol tutup modal sukses
+         document.getElementById("successClose").onclick = function () {
+            successModal.style.display = "none";
+            window.location.href = window.location.href;
+        };
 
         // Menambahkan event listener untuk tombol tutup modal
         Array.from(closeBtns).forEach(function (btn) {
