@@ -1,5 +1,4 @@
 <?php
-session_start();
 include "koneksi.php";
 
 function generateId($jenisCucian)
@@ -8,7 +7,6 @@ function generateId($jenisCucian)
     $randomNumber = rand(10, 99);
     return $prefix . $randomNumber;
 }
-
 
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
@@ -24,19 +22,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
     $hargaCucian = filter_var($hargaCucian, FILTER_VALIDATE_INT);
 
     if ($hargaCucian === false) {
-        $_SESSION['error_message'] = "Harga cucian tidak valid.";
+        echo "<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            showAlertModal('Harga cucian tidak valid.');
+        });
+      </script>";
     } else {
         $idJenisCucian = generateId($jenisCucian);
-
         // Use prepared statement to prevent SQL injection
         $stmt = $conn->prepare("INSERT INTO Jenis_Cucian (id_jenis_cucian, jenis_cucian, harga) VALUES (?, ?, ?)");
         $stmt->bind_param("ssi", $idJenisCucian, $jenisCucian, $hargaCucian);
 
-        
         if ($stmt->execute()) {
-            $_SESSION['success_message'] = "Jenis cucian baru berhasil ditambahkan.";
+            echo "<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                showAlertModal('Data Sudah Ditambahkan');
+            });
+          </script>";
         } else {
-            $_SESSION['error_message'] = "Error: " . $stmt->error;
+            echo "<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                showAlertModal('Data Error');
+            });
+          </script>";
         }
 
         $stmt->close();
@@ -47,14 +55,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete'])) {
     $idJenisCucian = $_POST['idJenisCucian'];
 
-    // Use prepared statement to prevent SQL injection
     $stmt = $conn->prepare("DELETE FROM Jenis_Cucian WHERE id_jenis_cucian = ?");
     $stmt->bind_param("s", $idJenisCucian);
 
     if ($stmt->execute()) {
-        $_SESSION['success_message'] = "Jenis cucian berhasil dihapus.";
+        $message = "Data Sudah Terhapus!";
     } else {
-        $_SESSION['error_message'] = "Error: " . $stmt->error;
+        $message = "Error: " . $stmt->error;
     }
 
     $stmt->close();
@@ -71,16 +78,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit'])) {
     $hargaCucian = filter_var($hargaCucian, FILTER_VALIDATE_INT);
 
     if ($hargaCucian === false) {
-        $_SESSION['error_message'] = "Harga cucian tidak valid.";
+        echo "<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            showAlertModal('Harga cucian tidak valid.');
+        });
+      </script>";
     } else {
         // Use prepared statement to prevent SQL injection
         $stmt = $conn->prepare("UPDATE Jenis_Cucian SET jenis_cucian = ?, harga = ? WHERE id_jenis_cucian = ?");
         $stmt->bind_param("sis", $jenisCucian, $hargaCucian, $idJenisCucian);
 
         if ($stmt->execute()) {
-            $_SESSION['success_message'] = "Jenis cucian berhasil diupdate.";
+            echo "<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                showAlertModal('Jenis cucian berhasil diupdate.');
+            });
+          </script>";
         } else {
-            $_SESSION['error_message'] = "Error: " . $stmt->error;
+            echo "<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                showAlertModal('Error: " . $stmt->error . "');
+            });
+          </script>";
         }
 
         $stmt->close();
@@ -91,7 +110,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit'])) {
 $sql = "SELECT * FROM Jenis_Cucian";
 $result = mysqli_query($conn, $sql);
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -112,7 +130,7 @@ $result = mysqli_query($conn, $sql);
         }
 
         .table-fixed-header {
-            height: 300px;
+            height: 250px;
             overflow-y: auto;
         }
 
@@ -122,14 +140,44 @@ $result = mysqli_query($conn, $sql);
             background: white;
             z-index: 1000;
         }
+
+        .modal-header .bi-exclamation-circle-fill {
+            font-size: 1.5rem;
+        }
+
+        .modal-title {
+            display: flex;
+            align-items: center;
+        }
+
+        .modal-body {
+            font-size: 1.1rem;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .modal-footer .btn-success {
+            width: 100px;
+        }
+
+        .modal-header .bi-question-circle-fill,
+        .modal-header .bi-exclamation-circle-fill {
+            font-size: 1.5rem;
+        }
+
+        .modal-body {
+            font-size: 1.1rem;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
     </style>
     <title>Pengelolaan Cucian</title>
 </head>
 
 <body class="bg-secondary" style="--bs-bg-opacity: .15;">
     <div class="container">
-        <h2 class="fw-bold mb-5">Pengelolaan Cucian</h2>
-        <h5 class="card-title mb-4">Daftar Jenis Cucian</h5>
+        <h2 class="fw-bold mb-3">Pengelolaan Cucian</h2>
+        <h5 class="card-title mb-2">Daftar Jenis Cucian</h5>
 
         <!-- Tabel Jenis Cucian -->
         <div class="table-wrapper card">
@@ -154,16 +202,13 @@ $result = mysqli_query($conn, $sql);
                                 echo "<td>" . htmlspecialchars($row['jenis_cucian']) . "</td>";
                                 echo "<td>Rp. " . number_format($row['harga'], 0, ',', '.') . "</td>";
                                 echo '<td class="text-center">
-                                <form method="POST" action="" style="display:inline-block;">
-                                    <input type="hidden" name="idJenisCucian" value="' . htmlspecialchars($row['id_jenis_cucian']) . '">
-                                    <button type="submit" name="delete" class="btn btn-link p-0 btn-lg">
+                                    <button type="button" class="btn btn-link p-0 btn-lg" onclick="showConfirmationModal(\'' . htmlspecialchars($row['id_jenis_cucian']) . '\')">
                                         <i class="bi bi-trash text-danger"></i>
                                     </button>
-                                </form>
-                                <button class="btn btn-lg" type="button" data-bs-toggle="modal" data-bs-target="#editModal" data-id="' . htmlspecialchars($row['id_jenis_cucian']) . '" data-jenis="' . htmlspecialchars($row['jenis_cucian']) . '" data-harga="' . htmlspecialchars($row['harga']) . '">
-                                    <i class="bi bi-pencil-square text-secondary"></i>
-                                </button>
-                            </td>';
+                                    <button class="btn btn-lg" type="button" data-bs-toggle="modal" data-bs-target="#editModal" data-id="' . htmlspecialchars($row['id_jenis_cucian']) . '" data-jenis="' . htmlspecialchars($row['jenis_cucian']) . '" data-harga="' . htmlspecialchars($row['harga']) . '">
+                                        <i class="bi bi-pencil-square text-secondary"></i>
+                                    </button>
+                                </td>';
                                 echo "</tr>";
                                 $no++;
                             }
@@ -184,73 +229,138 @@ $result = mysqli_query($conn, $sql);
                     <input type="hidden" name="add" value="1">
                     <div class="form-group p-2">
                         <label for="jenisCucian">Jenis Cucian</label>
-                        <input type="text" class="form-control" id="jenisCucian" name="jenisCucian" placeholder="Masukan Jenis Cucian" required>
+                        <input type="text" class="form-control" id="jenisCucian" name="jenisCucian"
+                            placeholder="Masukan Jenis Cucian" required>
                     </div>
 
                     <div class="form-group p-2">
-                        <label for="hargaCucian">Harga Jenis Cucian</label>
-                        <input type="number" class="form-control" id="hargaCucian" name="hargaCucian" placeholder="Masukan Harga Jenis Cucian" required>
+                        <label for="hargaCucian">Harga Cucian</label>
+                        <input type="number" class="form-control" id="hargaCucian" name="hargaCucian"
+                            placeholder="Masukan Harga Cucian" required>
                     </div>
 
-                    <button type="submit" class="btn btn-success p-2">Simpan</button>
+                    <div class="form-group p-2">
+                        <button type="submit" class="btn btn-success mt-2 w-100">Tambah</button>
+                    </div>
                 </form>
             </div>
         </div>
-    </div>
 
-    <!-- Edit Modal -->
-    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editModalLabel">Edit Jenis Cucian</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form method="POST" action="">
+        <!-- Modal konfirmasi penghapusan -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel"><i class="bi bi-question-circle-fill"></i> Konfirmasi</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
                     <div class="modal-body">
-                        <input type="hidden" name="edit" value="1">
-                        <input type="hidden" name="idJenisCucian" id="editIdJenisCucian">
-                        <div class="form-group p-2">
-                            <label for="editJenisCucian">Jenis Cucian</label>
-                            <input type="text" class="form-control" id="editJenisCucian" name="editJenisCucian" placeholder="Masukan Jenis Cucian" required>
-                        </div>
-                        <div class="form-group p-2">
-                            <label for="editHargaCucian">Harga Jenis Cucian</label>
-                            <input type="number" class="form-control" id="editHargaCucian" name="editHargaCucian" placeholder="Masukan Harga Jenis Cucian" required>
-                        </div>
+                        Apakah Anda yakin ingin menghapus data ini?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                        <form id="deleteForm" method="POST" action="">
+                            <input type="hidden" name="delete" value="1">
+                            <input type="hidden" name="idJenisCucian" id="deleteIdJenisCucian">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                            <button type="submit" class="btn btn-success">Ya</button>
+                        </form>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
+
+        <!-- Modal edit data -->
+        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editModalLabel"><i class="bi bi-pencil-square"></i> Edit Data Cucian</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="POST" action="">
+                            <input type="hidden" name="edit" value="1">
+                            <input type="hidden" name="idJenisCucian" id="editIdJenisCucian">
+                            <div class="form-group p-2">
+                                <label for="editJenisCucian">Jenis Cucian</label>
+                                <input type="text" class="form-control" id="editJenisCucian" name="editJenisCucian"
+                                    placeholder="Masukan Jenis Cucian" required>
+                            </div>
+
+                            <div class="form-group p-2">
+                                <label for="editHargaCucian">Harga Cucian</label>
+                                <input type="number" class="form-control" id="editHargaCucian" name="editHargaCucian"
+                                    placeholder="Masukan Harga Cucian" required>
+                            </div>
+
+                            <div class="form-group p-2">
+                                <button type="submit" class="btn btn-success mt-2 w-100">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Alert -->
+        <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="alertModalLabel"><i class="bi bi-exclamation-circle-fill"></i> Informasi</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="alertMessage"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap.bundle.min.js"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const message = urlParams.get('message');
+            if (message) {
+                showAlertModal(message);
+            }
+        });
+
+        function showAlertModal(message) {
+            document.getElementById('alertMessage').innerText = message;
+            const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+            alertModal.show();
+        }
+
+        function showConfirmationModal(idJenisCucian) {
+            document.getElementById('deleteIdJenisCucian').value = idJenisCucian;
+            const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            deleteModal.show();
+        }
+
+        // Event listener to populate edit modal with data
         var editModal = document.getElementById('editModal');
-        editModal.addEventListener('show.bs.modal', function(event) {
+        editModal.addEventListener('show.bs.modal', function (event) {
             var button = event.relatedTarget;
             var idJenisCucian = button.getAttribute('data-id');
             var jenisCucian = button.getAttribute('data-jenis');
             var hargaCucian = button.getAttribute('data-harga');
 
-            var modalTitle = editModal.querySelector('.modal-title');
-            var modalBodyInputId = editModal.querySelector('.modal-body input#editIdJenisCucian');
-            var modalBodyInputJenis = editModal.querySelector('.modal-body input#editJenisCucian');
-            var modalBodyInputHarga = editModal.querySelector('.modal-body input#editHargaCucian');
+            var modalIdInput = document.getElementById('editIdJenisCucian');
+            var modalJenisInput = document.getElementById('editJenisCucian');
+            var modalHargaInput = document.getElementById('editHargaCucian');
 
-            modalBodyInputId.value = idJenisCucian;
-            modalBodyInputJenis.value = jenisCucian;
-            modalBodyInputHarga.value = hargaCucian;
+            modalIdInput.value = idJenisCucian;
+            modalJenisInput.value = jenisCucian;
+            modalHargaInput.value = hargaCucian;
         });
     </script>
-
 </body>
 
 </html>
-<?php
-mysqli_close($conn);
-?>

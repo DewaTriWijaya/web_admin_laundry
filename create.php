@@ -1,10 +1,10 @@
 <?php
-$servername = "127.0.0.1:3307"; //Khusus Faris
-// $servername = "localhost";
+// $servername = "127.0.0.1:3307";
+$servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "admin_laundry";
-$socket = "/opt/lampp/var/mysql/mysql.sock"; // Update with the correct socket path
+// $socket = "/opt/lampp/var/mysql/mysql.sock"; // Update with the correct socket path
 
 // Membuat koneksi ke database
 $conn = new mysqli($servername, $username, $password, $dbname, null, $socket);
