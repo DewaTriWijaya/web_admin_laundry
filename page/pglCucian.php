@@ -150,6 +150,20 @@ $result = mysqli_query($conn, $sql);
             align-items: center;
         }
 
+
+        .modal-header-uhuy {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .modal-title-uhuy {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+
         .modal-body {
             font-size: 1.1rem;
             margin-top: 10px;
@@ -163,12 +177,6 @@ $result = mysqli_query($conn, $sql);
         .modal-header .bi-question-circle-fill,
         .modal-header .bi-exclamation-circle-fill {
             font-size: 1.5rem;
-        }
-
-        .modal-body {
-            font-size: 1.1rem;
-            margin-top: 10px;
-            margin-bottom: 10px;
         }
     </style>
     <title>Pengelolaan Cucian</title>
@@ -250,18 +258,18 @@ $result = mysqli_query($conn, $sql);
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteModalLabel"><i class="bi bi-question-circle-fill"></i> Konfirmasi</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="modal-header-uhuy justify-content-center m-4">
+                        <span class="bi bi-question-circle modal-title-uhuy"> Konfirmasi</span>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body d-flex align-items-center justify-content-center w-100">
                         Apakah Anda yakin ingin menghapus data ini?
                     </div>
                     <div class="modal-footer">
-                        <form id="deleteForm" method="POST" action="">
+                        <form id="deleteForm" method="POST" action=""
+                            class="d-flex align-items-center justify-content-center w-100 gap-2">
                             <input type="hidden" name="delete" value="1">
                             <input type="hidden" name="idJenisCucian" id="deleteIdJenisCucian">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tidak</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tidak</button>
                             <button type="submit" class="btn btn-success">Ya</button>
                         </form>
                     </div>
@@ -274,7 +282,8 @@ $result = mysqli_query($conn, $sql);
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editModalLabel"><i class="bi bi-pencil-square"></i> Edit Data Cucian</h5>
+                        <h5 class="modal-title" id="editModalLabel"><i class="bi bi-pencil-square"></i> Edit Data Cucian
+                        </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -294,7 +303,7 @@ $result = mysqli_query($conn, $sql);
                             </div>
 
                             <div class="form-group p-2">
-                                <button type="submit" class="btn btn-success mt-2 w-100">Update</button>
+                                <button type="submit" class="btn btn-success mt-2 w-100">Perbarui</button>
                             </div>
                         </form>
                     </div>
@@ -306,11 +315,10 @@ $result = mysqli_query($conn, $sql);
         <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="alertModalLabel"><i class="bi bi-exclamation-circle-fill"></i> Informasi</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="modal-header-uhuy justify-content-center m-4">
+                        <span class="bi bi-question-circle modal-title-uhuy"> Informasi</span>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body d-flex align-items-center justify-content-center w-100">
                         <p id="alertMessage"></p>
                     </div>
                     <div class="modal-footer">
