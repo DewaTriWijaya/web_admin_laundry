@@ -140,7 +140,7 @@ $conn->close();
                             </tbody>
                         </table>
                     </div>
-                    <div class="d-flex justify-content-end">
+                    <div class="d-flex justify-content-end mt-2">
                         <button type="submit" name="simpan" class="btn btn-success px-4">Simpan</button>
                     </div>
                 </form>
@@ -154,7 +154,7 @@ $conn->close();
             <div class="modal-header justify-content-center">
                 <span class="bi bi-info-circle modal-title"> Pemberitahuan</span>
             </div>
-            <p>Status laundry berhasil diubah</p>
+            <p>Status laundry berhasil disimpan</p>
             <div class="modal-footer">
                 <button id="successClose" class="btn btn-success">Ya</button>
             </div>
