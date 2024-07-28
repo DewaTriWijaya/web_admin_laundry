@@ -14,12 +14,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
+    <style>
+        .menu {
+            width: 350px;
+        }
+    </style>
     <title>Laundry</title>
 </head>
 
 <body>
-    <div class="d-flex vh-100">
-        <div class="p-4 bg-custom">
+    <div class="d-flex vh-100 ">
+        <div class="p-4 bg-custom menu">
             <div class="d-flex gap-4">
                 <img src="img/Logo.png" alt="logo" class="w-25 h-25">
                 <div class="text-white align-self-center">
@@ -37,13 +42,13 @@
                     <a class="text-white" href="index.php?page=pendaftaran" style="text-decoration:none">Pendaftaran</a>
                 </div>
 
-                <div class="side-menu d-flex align-items-center" onclick="document.querySelector('#transaksi-link').click()">
+                <div class="side-menu d-flex align-items-center" href="#transaksiEx" onclick="document.querySelector('#transaksi-link').click()">
                     <img src="img/transaksi.png" alt="transaksi" class="me-2">
                     <a id="transaksi-link" data-bs-toggle="collapse" href="#transaksiEx" role="button" aria-expanded="false" aria-controls="transaksiEx" class="text-white" style="text-decoration:none">Transaksi</a>
                 </div>
 
                 <div class="collapse" id="transaksiEx">
-                    <div class="submenu ms-4">
+                    <div class="submenu ms-3">
                         <div class="side-menu" onclick="window.location.href='index.php?page=pglTransaksi'">
                             <img src="img/notebook.png" alt="pendaftaran">
                             <a class="text-white" href="index.php?page=pglTransaksi" style="text-decoration:none">Pengelolaan Transaksi</a>
