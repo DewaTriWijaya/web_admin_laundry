@@ -7,7 +7,6 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-
 // Mengambil semua data dari tabel status_laundry
 $sql = "SELECT * FROM Status_Laundry";
 $result = mysqli_query($conn, $sql);
@@ -83,20 +82,6 @@ $conn->close();
         .modal-title {
             font-size: 25px;
             font-weight: bold;
-            
-        }
-
-        .close {
-            color: #aaa;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
         }
 
         .modal-footer {
@@ -108,7 +93,15 @@ $conn->close();
         .modal-footer button {
             padding: 7px 20px;
         }
+
+        /* CSS untuk membuat tabel bisa digulir */
+        .table-container {
+            max-height: 300px;
+            overflow-y: auto;
+        }
     </style>
+    <!-- Link jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="bg-secondary" style="--bs-bg-opacity: .15;">
     <div class="container">
@@ -116,35 +109,37 @@ $conn->close();
             <h2 class="fw-bold mb-5">Informasi Status Laundry</h2>
             <div class="justify-content-center">
                 <form method="POST" action="">
-                    <table class="table table-borderless">
-                        <thead class="text-center">
-                            <tr>
-                                <th scope="col">No. Nota</th>
-                                <th scope="col">Tanggal Selesai</th>
-                                <th scope="col">Status Laundry</th>
-                                <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody class="table-light">
-                            <?php 
-                                // Menampilkan data dari hasil query
-                                if (mysqli_num_rows($result) > 0) {
-                                    while ($row = mysqli_fetch_assoc($result)) {
-                                        $status = $row["status_laundry"];
-                                        echo "<tr>";
-                                        echo "<td scope='row' class='text-center'><input type='hidden' name='No_Nota[]' value='".$row['No_Nota']."'>".$row['No_Nota']."</td>";
-                                        echo "<td><input type='date' class='form-control' name='tanggal_selesai[]' value='".$row['tanggal_selesai']."'></td>";
-                                        echo "<td class='text-center'><select name='status[]' class='form-select'>";
-                                        echo "<option value='Belum'" . ($status == 'Belum' ? " selected" : "") . ">Belum</option>";
-                                        echo "<option value='Selesai'" . ($status == 'Selesai' ? " selected" : "") . ">Selesai</option>";
-                                        echo "</select></td>";
-                                        echo "<td><button type='button' class='btn btn-primary' onclick='showConfirmationModal()'>Pemberitahuan</button></td>";
-                                        echo "</tr>";
+                    <div class="table-container">
+                        <table class="table table-borderless">
+                            <thead class="text-center">
+                                <tr>
+                                    <th scope="col">No. Nota</th>
+                                    <th scope="col">Tanggal Selesai</th>
+                                    <th scope="col">Status Laundry</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-light">
+                                <?php 
+                                    // Menampilkan data dari hasil query
+                                    if (mysqli_num_rows($result) > 0) {
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                            $status = $row["status_laundry"];
+                                            echo "<tr>";
+                                            echo "<td scope='row' class='text-center'><input type='hidden' name='No_Nota[]' value='".$row['No_Nota']."'>".$row['No_Nota']."</td>";
+                                            echo "<td><input type='date' class='form-control' name='tanggal_selesai[]' value='".$row['tanggal_selesai']."'></td>";
+                                            echo "<td class='text-center'><select name='status[]' class='form-select'>";
+                                            echo "<option value='Belum'" . ($status == 'Belum' ? " selected" : "") . ">Belum</option>";
+                                            echo "<option value='Selesai'" . ($status == 'Selesai' ? " selected" : "") . ">Selesai</option>";
+                                            echo "</select></td>";
+                                            echo "<td><button type='button' class='btn btn-primary notification-btn' data-nota='".$row['No_Nota']."' data-status='".$status."' data-tanggal='".$row['tanggal_selesai']."'>Pemberitahuan</button></td>";
+                                            echo "</tr>";
+                                        }
                                     }
-                                }
-                            ?>
-                        </tbody>
-                    </table>
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
                     <div class="d-flex justify-content-end">
                         <button type="submit" name="simpan" class="btn btn-success px-4">Simpan</button>
                     </div>
@@ -185,6 +180,7 @@ $conn->close();
         var successModal = document.getElementById("successModal");
         var confirmationModal = document.getElementById("confirmationModal");
         var closeBtns = document.getElementsByClassName("close");
+        var selectedData = {};
 
         // Menampilkan modal sukses jika data berhasil diupdate
         <?php if ($success) { ?>
@@ -217,6 +213,18 @@ $conn->close();
             }
         }
 
+        // Menambahkan event listener untuk tombol pemberitahuan
+        document.querySelectorAll('.notification-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                selectedData = {
+                    nota: this.getAttribute('data-nota'),
+                    status: this.getAttribute('data-status'),
+                    tanggal: this.getAttribute('data-tanggal')
+                };
+                showConfirmationModal();
+            });
+        });
+
         // Fungsi untuk menampilkan modal konfirmasi
         function showConfirmationModal() {
             confirmationModal.style.display = "block";
@@ -224,8 +232,19 @@ $conn->close();
 
         // Mengambil elemen tombol konfirmasi
         document.getElementById("confirmYes").onclick = function () {
-            confirmationModal.style.display = "none";
-            alert("Informasi status telah diberitahukan kepada pelanggan.");
+            $.ajax({
+                url: 'wa.php',
+                type: 'POST',
+                data: selectedData,
+                success: function(response) {
+                    confirmationModal.style.display = "none";
+                    alert("Informasi status telah diberitahukan kepada pelanggan.");
+                },
+                error: function(error) {
+                    confirmationModal.style.display = "none";
+                    alert("Gagal mengirim pemberitahuan.");
+                }
+            });
         }
 
         document.getElementById("confirmNo").onclick = function () {
