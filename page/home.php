@@ -16,13 +16,9 @@ include "koneksi.php";
             min-height: 200px;
         }
 
-        .card {
-            height: 100%;
-        }
-
         .chart-container {
             position: relative;
-            height: 400px;
+            height: 200px;
         }
     </style>
 
@@ -68,8 +64,9 @@ include "koneksi.php";
                 Grafik Transaksi Per Bulan
             </div>
             <div class="card-body">
-                <div class="chart-container">
+                <div class="chart-container d-flex gap-4">
                     <canvas id="transactionsChart"></canvas>
+                    <h1>Data lainnya, Tambahin bang dew</h1>
                 </div>
             </div>
         </div>
