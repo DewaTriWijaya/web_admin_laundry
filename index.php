@@ -1,7 +1,3 @@
-<?php
-include "koneksi.php"; // Jika Anda tidak menggunakan file ini, hapus atau uncomment sesuai kebutuhan
-$isTransaksiOpen = isset($_GET['menu']) && $_GET['menu'] === 'transaksi';
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,7 +9,7 @@ $isTransaksiOpen = isset($_GET['menu']) && $_GET['menu'] === 'transaksi';
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
     <style>
         .menu {
@@ -38,32 +34,28 @@ $isTransaksiOpen = isset($_GET['menu']) && $_GET['menu'] === 'transaksi';
                 </div>
             </div>
             <div class="mt-5">
-                <div class="side-menu" onclick="window.location.href='index.php?page=home'">
-                    <img src="img/dashboard.png" alt="beranda">
-                    <a class="text-white" href="index.php?page=home" style="text-decoration:none">Beranda</a>
-                </div>
                 <div class="side-menu" onclick="window.location.href='index.php?page=pendaftaran'">
                     <img src="img/user.png" alt="pendaftaran">
                     <a class="text-white" href="index.php?page=pendaftaran" style="text-decoration:none">Pendaftaran</a>
                 </div>
 
-                <div class="side-menu d-flex align-items-center" href="#transaksiEx" onclick="document.querySelector('#transaksi-link').click()">
+                <div class="side-menu d-flex align-items-center" onclick="openHomeAndToggleDropdown()">
                     <img src="img/transaksi.png" alt="transaksi" class="me-2">
                     <a id="transaksi-link" data-bs-toggle="collapse" href="#transaksiEx" role="button" aria-expanded="false" aria-controls="transaksiEx" class="text-white" style="text-decoration:none">Transaksi</a>
                 </div>
 
-                <div class="collapse <?php echo $isTransaksiOpen ? 'show' : ''; ?>" id="transaksiEx">
-    <div class="submenu ms-3">
-        <div class="side-menu" onclick="window.location.href='index.php?page=pglTransaksi&menu=transaksi'">
-            <img src="img/notebook.png" alt="pendaftaran">
-            <a class="text-white" href="index.php?page=pglTransaksi&menu=transaksi" style="text-decoration:none">Kelola Transaksi</a>
-        </div>
-        <div class="submenu-item side-menu d-flex align-items-center" onclick="window.location.href='index.php?page=pglCucian&menu=transaksi'">
-            <img src="img/washing.png" alt="pendaftaran">
-            <a class="text-white" href="index.php?page=pglCucian&menu=transaksi" style="text-decoration:none">Kelola Cucian</a>
-        </div>
-    </div>
-</div>
+                <div class="collapse <?php echo isset($_GET['menu']) && $_GET['menu'] === 'transaksi' ? 'show' : ''; ?>" id="transaksiEx">
+                    <div class="submenu ms-3">
+                        <div class="side-menu" onclick="window.location.href='index.php?page=pglTransaksi&menu=transaksi'">
+                            <img src="img/notebook.png" alt="pendaftaran">
+                            <a class="text-white" href="index.php?page=pglTransaksi&menu=transaksi" style="text-decoration:none">Kelola Transaksi</a>
+                        </div>
+                        <div class="submenu-item side-menu d-flex align-items-center" onclick="window.location.href='index.php?page=pglCucian&menu=transaksi'">
+                            <img src="img/washing.png" alt="pendaftaran">
+                            <a class="text-white" href="index.php?page=pglCucian&menu=transaksi" style="text-decoration:none">Kelola Cucian</a>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="side-menu" onclick="window.location.href='index.php?page=laporan'">
                     <img src="img/bar-chart.png" alt="laporan">
@@ -74,7 +66,6 @@ $isTransaksiOpen = isset($_GET['menu']) && $_GET['menu'] === 'transaksi';
                     <img src="img/bell.png" alt="status">
                     <a class="text-white" href="index.php?page=statusLaundry" style="text-decoration:none">Status Laundry</a>
                 </div>
-
             </div>
         </div>
 
@@ -117,13 +108,16 @@ $isTransaksiOpen = isset($_GET['menu']) && $_GET['menu'] === 'transaksi';
             } else {
                 include 'page/pendaftaran.php';
             }
-            // Hapus { dan perbaiki penutup <section> dan komentar
             ?>
         </div>
     </div>
 
-
-
+    <script>
+        function openHomeAndToggleDropdown() {
+            // Arahkan ke home.php
+            window.location.href = 'index.php?page=home&menu=transaksi';
+        }
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
