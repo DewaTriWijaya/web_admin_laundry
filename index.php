@@ -20,14 +20,14 @@
 <body>
     <div class="d-flex vh-100">
         <div class="p-4 bg-custom">
-            <div class="d-flex gap-4 align-items-center">
+            <div class="d-flex gap-4">
                 <img src="img/Logo.png" alt="logo" class="w-25 h-25">
                 <div class="text-white align-self-center">
-                    <h1>Admin</h1>
+                    <h1 class="fs-5">Admin</h1>
                     <p class="lh-1">Sistem Laundry</p>
                 </div>
             </div>
-            <div class="mt-5">
+            <div class="mt-3">
                 <div class="side-menu" onclick="window.location.href='index.php?page=home'">
                     <img src="img/dashboard.png" alt="beranda">
                     <a class="text-white" href="index.php?page=home" style="text-decoration:none">Beranda</a>
