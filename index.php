@@ -18,6 +18,10 @@
         .menu {
             width: 350px;
         }
+
+        body {
+            font-family: poppins;
+        }
     </style>
     <title>Laundry</title>
 </head>
@@ -32,7 +36,7 @@
                     <p class="lh-1">Sistem Laundry</p>
                 </div>
             </div>
-            <div class="mt-3">
+            <div class="mt-5">
                 <div class="side-menu" onclick="window.location.href='index.php?page=home'">
                     <img src="img/dashboard.png" alt="beranda">
                     <a class="text-white" href="index.php?page=home" style="text-decoration:none">Beranda</a>
