@@ -122,7 +122,7 @@ $result = mysqli_query($conn, $sql);
     <style>
         .table td,
         .table th {
-            padding: 15px;
+            padding: 8px;
         }
 
         .table-wrapper {
@@ -130,7 +130,7 @@ $result = mysqli_query($conn, $sql);
         }
 
         .table-fixed-header {
-            height: 250px;
+            height: 190px;
             overflow-y: auto;
         }
 
