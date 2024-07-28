@@ -1,5 +1,6 @@
 <?php
-// include "koneksi.php"; // Jika Anda tidak menggunakan file ini, hapus atau uncomment sesuai kebutuhan
+include "koneksi.php"; // Jika Anda tidak menggunakan file ini, hapus atau uncomment sesuai kebutuhan
+$isTransaksiOpen = isset($_GET['menu']) && $_GET['menu'] === 'transaksi';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -51,18 +52,18 @@
                     <a id="transaksi-link" data-bs-toggle="collapse" href="#transaksiEx" role="button" aria-expanded="false" aria-controls="transaksiEx" class="text-white" style="text-decoration:none">Transaksi</a>
                 </div>
 
-                <div class="collapse" id="transaksiEx">
-                    <div class="submenu ms-3">
-                        <div class="side-menu" onclick="window.location.href='index.php?page=pglTransaksi'">
-                            <img src="img/notebook.png" alt="pendaftaran">
-                            <a class="text-white" href="index.php?page=pglTransaksi" style="text-decoration:none">Kelola Transaksi</a>
-                        </div>
-                        <div class="submenu-item side-menu d-flex align-items-center" onclick="window.location.href='index.php?page=pglCucian'">
-                            <img src="img/washing.png" alt="pendaftaran">
-                            <a class="text-white" href="index.php?page=pglCucian" style="text-decoration:none">Kelola Cucian</a>
-                        </div>
-                    </div>
-                </div>
+                <div class="collapse <?php echo $isTransaksiOpen ? 'show' : ''; ?>" id="transaksiEx">
+    <div class="submenu ms-3">
+        <div class="side-menu" onclick="window.location.href='index.php?page=pglTransaksi&menu=transaksi'">
+            <img src="img/notebook.png" alt="pendaftaran">
+            <a class="text-white" href="index.php?page=pglTransaksi&menu=transaksi" style="text-decoration:none">Kelola Transaksi</a>
+        </div>
+        <div class="submenu-item side-menu d-flex align-items-center" onclick="window.location.href='index.php?page=pglCucian&menu=transaksi'">
+            <img src="img/washing.png" alt="pendaftaran">
+            <a class="text-white" href="index.php?page=pglCucian&menu=transaksi" style="text-decoration:none">Kelola Cucian</a>
+        </div>
+    </div>
+</div>
 
                 <div class="side-menu" onclick="window.location.href='index.php?page=laporan'">
                     <img src="img/bar-chart.png" alt="laporan">
