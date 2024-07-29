@@ -1,5 +1,40 @@
 <?php
-// include "../koneksi.php";
+include "koneksi.php";
+
+$success = false;
+$error = false;
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Get the form data
+    $name = $_POST['name'];
+    $phone = $_POST['phone'];
+    $address = $_POST['address'];
+
+    // Check if the phone number already exists in the database
+    $check_sql = "SELECT * FROM pelanggan WHERE No_HP = '$phone'";
+    $result = mysqli_query($conn, $check_sql);
+
+    if (mysqli_num_rows($result) > 0) {
+        $error = true;
+        header("Location: " . $_SERVER['PHP_SELF'] . "?error=1");
+        exit();
+    } else {
+        // Prepare and execute the SQL query
+        $sql = "INSERT INTO pelanggan (nama, No_HP, alamat) VALUES ('$name', '$phone', '$address')";
+        if (mysqli_query($conn, $sql)) {
+            $success = true;
+            header("Location: " . $_SERVER['PHP_SELF'] . "?success=1");
+            exit();
+        } else {
+            $error = true;
+            header("Location: " . $_SERVER['PHP_SELF'] . "?error=2");
+            exit();
+        }
+    }
+
+    // Close the database connection
+    mysqli_close($conn);
+}
 ?>
 
 <!DOCTYPE html>
@@ -8,123 +43,108 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pendaftaran Pelanggan</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            height: 100vh;
-        }
-        .sidebar {
-            width: 250px;
-            background-color: #f2f2f2;
-            padding: 20px;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-        }
-        .sidebar h2 {
-            margin-top: 0;
-        }
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-        }
-        .sidebar ul li {
-            margin-bottom: 10px;
-        }
-        .sidebar ul li a {
-            text-decoration: none;
-            color: #333;
-            font-size: 16px;
-        }
-        .sidebar ul li ul {
-            margin-top: 5px;
-            padding-left: 20px;
-        }
-        .content {
-            flex-grow: 1;
-            padding: 20px;
-        }
-        h1 {
-            font-size: 24px;
-        }
-        .form-container {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 2px 2px 12px rgba(0,0,0,0.1);
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-        input[type="text"], input[type="tel"], textarea {
-            width: calc(100% - 22px);
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            font-size: 16px;
-        }
-        textarea {
-            height: 100px;
-            resize: vertical;
-        }
-        button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 3px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-        button#save {
-            background-color: #4CAF50;
-            color: white;
-        }
-        button#delete {
-            background-color: #f44336;
-            color: white;
-        }
-    </style>
 </head>
-<body>
-    <div class="content">
-        <h1>Pendaftaran Pelanggan</h1>
-        <div class="form-container">
-            <label for="name">Nama</label>
-            <input type="text" id="name" placeholder="Masukan Nama" required>
-            <label for="phone">Nomor Handphone</label>
-            <input type="tel" id="phone" placeholder="Masukan Nomor Handphone" required>
-            <label for="address">Alamat</label>
-            <textarea id="address" placeholder="Masukan Alamat" required></textarea>
-            <button id="save">SIMPAN</button>
-            <button id="delete">HAPUS</button>
+<body class="bg-secondary" style="--bs-bg-opacity: .15;">
+    <div class="container-fluid h-100 d-flex flex-column">
+        <div class="row">
+            <div class="col">
+                <h2 class="fw-bold mb-5">Pendaftaran Pelanggan</h2>
+                <div class="card">
+                    <div class="card-body">
+                        <form method="POST" id="customerForm">
+                            <div class="form-group">
+                                <label for="name"><b>Nama</b></label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Masukan Nama" required>
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="phone"><b>Nomor Handphone</b></label>
+                                <input type="tel" class="form-control" id="phone" name="phone" placeholder="Masukan Nomor Handphone" required>
+                            </div>
+                            <div class="form-group mt-2">
+                                <label for="address"><b>Alamat</b></label>
+                                <textarea class="form-control" id="address" name="address" placeholder="Masukan Alamat" required></textarea>
+                            </div>
+                            <div class="d-flex justify-content-center mt-2">
+                                <button type="submit" class="btn btn-success px-4 mx-2">Simpan</button>
+                                <button type="reset" class="btn btn-danger px-4">Hapus</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <script>
-        document.getElementById('save').addEventListener('click', function() {
-            const name = document.getElementById('name').value;
-            const phone = document.getElementById('phone').value;
-            const address = document.getElementById('address').value;
-            console.log(`Saved: Name - ${name}, Phone - ${phone}, Address - ${address}`);
-            document.getElementById('name').value = '';
-            document.getElementById('phone').value = '';
-            document.getElementById('address').value = '';
-        });
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header justify-content-center">
+                    <h4 class="modal-title bi bi-info-circle fw-bold" id="successModalLabel"> Pemberitahuan</h>
+                </div>
+                <div class="modal-body text-center">
+                    Data Pelanggan berhasil disimpan.
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-success" style="padding: 7px 20px;" data-dismiss="modal" id="confirmButton">Ya</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        document.getElementById('delete').addEventListener('click', function() {
-            document.getElementById('name').value = '';
-            document.getElementById('phone').value = '';
-            document.getElementById('address').value = '';
+    <!-- Error Modal -->
+    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header justify-content-center">
+                    <h4 class="modal-title bi bi-exclamation-circle-fill fw-bold" id="errorModalLabel"> Peringatan</h4>
+                </div>
+                <div class="modal-body text-center">
+                    <?php
+                    if (isset($_GET['error']) && $_GET['error'] == 1) {
+                        echo "Data yang ada isi sudah tersedia. Isi data terbaru anda!";
+                    } elseif (isset($_GET['error']) && $_GET['error'] == 2) {
+                        echo "Error: There was an error saving the data.";
+                    }
+                    ?>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-success" style="padding: 7px 20px;" data-dismiss="modal" id="errorConfirmButton">Ya</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Check if the URL contains the success parameter
+            if (new URLSearchParams(window.location.search).has('success')) {
+                $('#successModal').modal('show');
+            }
+
+            // Check if the URL contains the error parameter
+            if (new URLSearchParams(window.location.search).has('error')) {
+                $('#errorModal').modal('show');
+            }
+
+            $('#confirmButton').on('click', function() {
+                $('#successModal').modal('hide');
+                $('#successModal').on('hidden.bs.modal', function () {
+                    window.location.href = window.location.pathname; // Remove query parameters
+                });
+            });
+
+            $('#errorConfirmButton').on('click', function() {
+                $('#errorModal').modal('hide');
+                $('#errorModal').on('hidden.bs.modal', function () {
+                    window.location.href = window.location.pathname; // Remove query parameters
+                });
+            });
         });
     </script>
 </body>
 </html>
-
-
-

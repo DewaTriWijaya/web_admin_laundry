@@ -62,16 +62,6 @@ $conn->close();
             padding-top: 60px;
         }
 
-        .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto;
-            padding: 20px;
-            width: 20%;
-            text-align: center;
-            position: relative;
-            border: none;
-        }
-
         .modal-header {
             display: flex;
             justify-content: space-between;
@@ -150,27 +140,31 @@ $conn->close();
 
     <!-- Modal Sukses -->
     <div id="successModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header justify-content-center">
-                <span class="bi bi-info-circle modal-title"> Pemberitahuan</span>
-            </div>
-            <p>Status laundry berhasil disimpan</p>
-            <div class="modal-footer">
-                <button id="successClose" class="btn btn-success">Ya</button>
+        <div class="modal-dialog modal-dialog-centered">                           
+            <div class="modal-content">
+                <div class="modal-header justify-content-center">
+                    <span class="bi bi-info-circle modal-title"> Pemberitahuan</span>
+                </div>
+                <p class="text-center">Status laundry berhasil disimpan</p>
+                <div class="modal-footer">
+                    <button id="successClose" class="btn btn-success">Ya</button>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Modal Konfirmasi -->
     <div id="confirmationModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header justify-content-center">
-                <span class="bi bi-question-circle modal-title"> Konfirmasi</span>
-            </div>
-            <p>Apakah anda yakin ingin memberitahu informasi status ini kepada pelanggan?</p>
-            <div class="modal-footer">
-                <button id="confirmYes" class="btn btn-success">Ya</button>
-                <button id="confirmNo" class="btn btn-danger">Tidak</button>
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header justify-content-center">
+                    <span class="bi bi-question-circle modal-title"> Konfirmasi</span>
+                </div>
+                <p class="text-center">Apakah anda yakin ingin memberitahu informasi status ini kepada pelanggan?</p>
+                <div class="modal-footer">
+                    <button id="confirmYes" class="btn btn-success">Ya</button>
+                    <button id="confirmNo" class="btn btn-danger">Tidak</button>
+                </div>
             </div>
         </div>
     </div>
