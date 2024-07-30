@@ -7,8 +7,8 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-// Mengambil semua data dari tabel status_laundry
-$sql = "SELECT * FROM Status_Laundry";
+// Mengambil semua data dari tabel status_laundry yang statusnya 'Belum' atau 'Selesai' yang belum diberitahukan
+$sql = "SELECT * FROM Status_Laundry WHERE status_laundry='Belum' OR (status_laundry='Selesai' AND notified=0)";
 $result = mysqli_query($conn, $sql);
 
 $success = false;
@@ -39,7 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 // Menutup koneksi database
 $conn->close();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -115,7 +114,7 @@ $conn->close();
                                     if (mysqli_num_rows($result) > 0) {
                                         while ($row = mysqli_fetch_assoc($result)) {
                                             $status = $row["status_laundry"];
-                                            echo "<tr>";
+                                            echo "<tr id='row-".$row['No_Nota']."'>";
                                             echo "<td scope='row' class='text-center'><input type='hidden' name='No_Nota[]' value='".$row['No_Nota']."'>".$row['No_Nota']."</td>";
                                             echo "<td><input type='date' class='form-control' name='tanggal_selesai[]' value='".$row['tanggal_selesai']."'></td>";
                                             echo "<td class='text-center'><select name='status[]' class='form-select'>";
@@ -182,7 +181,7 @@ $conn->close();
         <?php } ?>
 
         // Menambahkan event listener untuk tombol tutup modal sukses
-         document.getElementById("successClose").onclick = function () {
+        document.getElementById("successClose").onclick = function () {
             successModal.style.display = "none";
             window.location.href = window.location.href;
         };
@@ -233,6 +232,23 @@ $conn->close();
                 success: function(response) {
                     confirmationModal.style.display = "none";
                     alert("Informasi status telah diberitahukan kepada pelanggan.");
+                    
+                    // Update status notified di database hanya jika status adalah 'Selesai'
+                    if (selectedData.status === 'Selesai') {
+                        $.ajax({
+                            url: 'update_notified.php',
+                            type: 'POST',
+                            data: { nota: selectedData.nota },
+                            success: function(response) {
+                                console.log("Status notified diperbarui.");
+                                // Hapus baris dari tabel jika status Selesai
+                                document.getElementById('row-' + selectedData.nota).style.display = 'none';
+                            },
+                            error: function(error) {
+                                console.error("Gagal memperbarui status notified.");
+                            }
+                        });
+                    }
                 },
                 error: function(error) {
                     confirmationModal.style.display = "none";
