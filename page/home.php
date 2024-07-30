@@ -71,7 +71,7 @@ if ($result_transactions_per_month) {
     echo "Error: " . mysqli_error($conn);
 }
 
-mysqli_close($conn);
+
 ?>
 
 <!DOCTYPE html>
@@ -90,16 +90,56 @@ mysqli_close($conn);
 
         .chart-container {
             position: relative;
-            height: 200px;
-        }
-
-        .chart-container {
-            position: relative;
             height: 250px;
         }
 
         #transactionsChart {
-            height: 100% !important; /* Ensures the canvas height adjusts to the container */
+            height: 100% !important;
+        }
+
+        .chart-item {
+            flex: 1;
+            min-width: 300px;
+            margin: 20px;
+        }
+
+        .chart-container-uhuy {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .chart-item-uhuy {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chart-item-uhuy canvas {
+            display: block;
+        }
+
+        .chart-item-uhuy .chart-text {
+            position: absolute;
+            text-align: center;
+        }
+
+        .card-container-between {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+            /* Optional: adds space between the cards */
+        }
+
+        .card-between {
+            flex: 1;
+            min-width: 300px;
+            /* Minimum width to ensure responsiveness */
+            margin: 10px;
         }
     </style>
 
@@ -108,10 +148,10 @@ mysqli_close($conn);
 
 <body class="bg-secondary" style="--bs-bg-opacity: .15;">
     <div class="container vh-100">
-        <h2 class="fw-bold mb-5">Transaksi</h2>
+        <h2 class="fw-bold mb-3">Transaksi</h2>
 
         <!-- Card Section -->
-        <div class="row mb-5">
+        <div class="row mb-3">
             <div class="d-flex justify-content-between w-100">
                 <!-- Card 1 -->
                 <div class="card flex-fill mx-2" style="width: 18rem;">
@@ -139,19 +179,118 @@ mysqli_close($conn);
             </div>
         </div>
 
-        <!-- Chart Card -->
-        <div class="card mb-5">
-            <div class="card-header">
-                Grafik Transaksi Per Bulan
-            </div>
-            <div class="card-body">
-                <div class="chart-container d-flex gap-4">
-                    <canvas id="transactionsChart"></canvas>
+        <div class="container mt-5">
+            <div class="card-container-between">
 
+                <!-- Chart Card Transaksi -->
+                <div class="card">
+                    <div class="card-header">
+                        Grafik Transaksi Per Bulan
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="transactionsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart Card Status -->
+                <div class="card">
+                    <div class="card-header">
+                        Transaksi Selesai / Belum
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container-uhuy">
+                            <div class="chart-item-uhuy">
+                                <canvas id="doughnutChart"></canvas>
+                                <div class="chart-text">
+                                    <h2 id="percentage">0%</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- Tabel Card -->
+        <div class="card">
+            <div class="card-header">
+                Tabel Transaksi
+            </div>
+            <div class="card-body">
+                <div class="chart-container">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>No Nota</th>
+                                <th>No HP</th>
+                                <th>Nama</th>
+                                <th>Berat Cucian</th>
+                                <th>Total Harga</th>
+                                <th>Tgl Masuk</th>
+                                <th>Estimasi Selesai</th>
+                                <th>Jenis Pembayaran</th>
+                                <th>Status Laundry</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            // Fetch data from database with JOIN
+                            $sql = "SELECT 
+                                    t.No_Nota, 
+                                    t.No_HP, 
+                                    p.nama, 
+                                    t.Berat_cucian, 
+                                    t.Total_Harga, 
+                                    t.Tgl_masuk, 
+                                    t.Estimasi_selesai, 
+                                    t.Jenis_pembayaran, 
+                                    s.status_laundry 
+                                FROM nota t
+                                JOIN pelanggan p ON t.No_HP = p.No_HP
+                                JOIN status_laundry s ON t.No_Nota = s.No_Nota";
+                            $result = $conn->query($sql);
+
+                            if ($result->num_rows > 0) {
+                                // Output data of each row
+                                while ($row = $result->fetch_assoc()) {
+                                    echo "<tr>
+                                        <td>{$row['No_Nota']}</td>
+                                        <td>{$row['No_HP']}</td>
+                                        <td>{$row['nama']}</td>
+                                        <td>{$row['Berat_cucian']}</td>
+                                        <td>{$row['Total_Harga']}</td>
+                                        <td>{$row['Tgl_masuk']}</td>
+                                        <td>{$row['Estimasi_selesai']}</td>
+                                        <td>{$row['Jenis_pembayaran']}</td>
+                                        <td>{$row['status_laundry']}</td>
+                                    </tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='9'>No data found</td></tr>";
+                            }
+
+                            // Fetch data for pie chart
+                            $sql_chart = "SELECT 
+                            SUM(CASE WHEN status_laundry = 'Selesai' THEN 1 ELSE 0 END) AS Selesai, 
+                            SUM(CASE WHEN status_laundry != 'Selesai' THEN 1 ELSE 0 END) AS Belum
+                                FROM status_laundry;";
+                            $result_chart = $conn->query($sql_chart);
+                            $chart_data = $result_chart->fetch_assoc();
+
+                            $conn->close();
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
+
+
+
 
     <script>
         const months = <?php echo json_encode($months); ?>;
@@ -184,6 +323,45 @@ mysqli_close($conn);
                 }
             }
         });
+
+
+        var ctx12 = document.getElementById('doughnutChart').getContext('2d');
+        var totalAktivitas = <?php echo $chart_data['Selesai'] + $chart_data['Belum']; ?>;
+        var persentaseBerhasil = Math.round((<?php echo $chart_data['Selesai']; ?> / totalAktivitas) * 100);
+
+        var doughnutChart = new Chart(ctx12, {
+            type: 'doughnut',
+            data: {
+                labels: ['Selesai', 'Belum'],
+                datasets: [{
+                    data: [<?php echo $chart_data['Selesai']; ?>, <?php echo $chart_data['Belum']; ?>],
+                    backgroundColor: ['#36a2eb', '#ff6384'],
+                    hoverBackgroundColor: ['#36a2eb', '#ff6384']
+                }]
+            },
+            options: {
+                responsive: true,
+                cutoutPercentage: 70,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                var label = tooltipItem.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                label += Math.round(tooltipItem.raw * 100 / totalAktivitas) + '%';
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        document.getElementById('percentage').textContent = persentaseBerhasil + '%';
+        document.getElementById('summary').textContent = '<?php echo $chart_data['Selesai']; ?> dari ' + totalAktivitas + ' total Transaksi';
+
     </script>
 </body>
 
