@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Pendaftaran Pelanggan</title>
 </head>
 <body class="bg-secondary" style="--bs-bg-opacity: .15;">
-    <div class="container-fluid h-100 d-flex flex-column">
+    <div class="container-fluid h-100 d-flex flex-column vh-100">
         <div class="row">
             <div class="col">
                 <h2 class="fw-bold mb-5">Pendaftaran Pelanggan</h2>

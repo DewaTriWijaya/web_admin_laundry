@@ -94,7 +94,7 @@ $conn->close();
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="bg-secondary" style="--bs-bg-opacity: .15;">
-    <div class="container">
+    <div class="container vh-100">
         <div class="row">
             <h2 class="fw-bold mb-5">Informasi Status Laundry</h2>
             <div class="justify-content-center">

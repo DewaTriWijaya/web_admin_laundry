@@ -220,7 +220,7 @@ if (isset($_POST['simpan_data_nota'])) {
 </head>
 <body class="bg-secondary" style="--bs-bg-opacity:.15;">
 <form method="POST" action="">
-    <div class="container">
+    <div class="container vh-100">
         <div class="row mb-3 ">
 
             <div class="head mb-5 mt-1 ">

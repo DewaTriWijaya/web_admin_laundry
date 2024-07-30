@@ -24,7 +24,7 @@
 </head>
 
 <body>
-    <div class="d-flex vh-100 ">
+    <div class="d-flex">
         <div class="p-4 bg-custom menu">
             <div class="d-flex gap-4">
                 <img src="img/Logo.png" alt="logo" class="w-25 h-25">

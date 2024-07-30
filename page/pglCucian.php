@@ -183,7 +183,7 @@ $result = mysqli_query($conn, $sql);
 </head>
 
 <body class="bg-secondary" style="--bs-bg-opacity: .15;">
-    <div class="container">
+    <div class="container vh-100">
         <h2 class="fw-bold mb-3">Pengelolaan Cucian</h2>
         <h5 class="card-title mb-2">Daftar Jenis Cucian</h5>
 
