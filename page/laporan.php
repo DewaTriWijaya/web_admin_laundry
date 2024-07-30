@@ -40,6 +40,24 @@ $conn->close(); // Menutup koneksi setelah selesai
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+         .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .table-fixed-header {
+            height: 290px;
+            overflow-y: auto;
+        }
+
+        .table-fixed-header thead th {
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 1000;
+        }
+
+    </style>
     <title>Laporan</title>
 </head>
 <body class="bg-secondary" style="--bs-bg-opacity: .15;">
@@ -56,8 +74,10 @@ $conn->close(); // Menutup koneksi setelah selesai
         </form>
 
         <h4>Transaksi</h4>
-        <div class="d-flex justify-content-center">
-            <table class="table table-borderless">
+        <div class="">
+            <div class="table-wrapper card">
+                <div class="table-fixed-header">      
+            <table class="table table-bordered table-striped">
                 <thead class="text-center">
                     <tr>
                         <th scope="col">No. Nota</th>
@@ -79,6 +99,9 @@ $conn->close(); // Menutup koneksi setelah selesai
                     ?>
                 </tbody>
             </table>
+            
+        </div>
+    </div>
         </div>
         <div class="d-flex justify-content-start mt-4">
             <button type="button" class="btn btn-success px-4">Unduh</button>
