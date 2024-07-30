@@ -321,8 +321,8 @@ $result = mysqli_query($conn, $sql);
                     <div class="modal-body d-flex align-items-center justify-content-center w-100">
                         <p id="alertMessage"></p>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+                    <div class="modal-footer d-flex align-items-center justify-content-center w-100">
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Ya</button>
                     </div>
                 </div>
             </div>
