@@ -69,26 +69,22 @@ if (isset($_POST['simpan_data_nota'])) {
     $randomLetters = $letters[rand(0, 25)] . $letters[rand(0, 25)];
     $noNota = $date . $randomLetters;
 
-    // Retrieve form data
     $noHp = $_POST['no_hp'];
     $jenisPembayaran = $_POST['metode_pembayaran']; // Assuming 'Qris' or 'Tunai'
     $tanggalTransaksi = $_POST['tanggal_transaksi'];
     $estimasiSelesai = $_POST['Estimasi_selesai'];
-    $totalHarga = str_replace('Rp ', '', $_POST['total_harga']); // Remove 'Rp ' prefix
-    $totalHarga = str_replace(',', '', $totalHarga); // Remove any commas
-    $totalHarga = (int)$totalHarga;
-
-    // Calculate total weight and ensure it's an integer
-    $totalBerat = 0;
-    foreach ($_POST['berat'] as $berat) {
-        $totalBerat += (int)$berat;
-    }
+    $totalHarga = isset($_POST['total_harga_int']) ? intval($_POST['total_harga_int']) : 0;
+    $totalBerat = isset($_POST['total_berat']) ? floatval($_POST['total_berat']) : 0.0;
 
     // Insert into `nota` table
     $query = "INSERT INTO nota (No_Nota, No_HP, Jenis_pembayaran, Berat_cucian, Tgl_masuk, Estimasi_selesai, Total_Harga) 
               VALUES ('$noNota', '$noHp', '$jenisPembayaran', '$totalBerat', '$tanggalTransaksi', '$estimasiSelesai', '$totalHarga')";
+    
+    // Insert into `Status Laundry` table
+    $query_status = "INSERT INTO status_laundry (No_Nota, status_laundry, tanggal_selesai) 
+              VALUES ('$noNota', 'Belum' , '$estimasiSelesai')";
 
-    if (mysqli_query($conn, $query)) {
+    if (mysqli_query($conn, $query) && mysqli_query($conn, $query_status)) {
         echo "<script>
                     document.addEventListener('DOMContentLoaded', function() {
                         showAlertModal('Data Berhasil disimpan');
@@ -97,7 +93,7 @@ if (isset($_POST['simpan_data_nota'])) {
     } else {
         echo "Error: " . $query . "<br>" . mysqli_error($conn);
     }
-
+    
     // Insert into `detail_laundry` table
     // $dataCucian = $_POST['tabel_cucian']; // Assuming this contains an array of items
     // foreach ($dataCucian as $item) {
@@ -124,36 +120,40 @@ if (isset($_POST['simpan_data_nota'])) {
     //     }
     
     // }
-    $dataCucianJson = $_POST['tabel_cucian'];
-    $dataCucian = json_decode($dataCucianJson, true); // Decode JSON to associative array
 
-    foreach ($dataCucian as $item) {
-        $jenisCucian = $item['jenis_cucian'];
-        $harga = (int)$item['harga']; // Ensure harga is an integer
-        $jenisCucian = mysqli_real_escape_string($conn, $jenisCucian);
+//     $dataCucianJson = $_POST['tabel_cucian'];
+//     $dataCucian = json_decode($dataCucianJson, true); // Decode JSON to associative array
 
-        // Query to get id_jenis_cucian based on jenis_cucian
-        $query_idCucian = "SELECT id_jenis_cucian FROM jenis_cucian WHERE jenis_cucian = '$jenisCucian'";
+//     foreach ($dataCucian as $item) {
+//         $jenisCucian = $item['jenis_cucian'];
+//         $harga = (int)$item['harga']; // Ensure harga is an integer
+//         $jenisCucian = mysqli_real_escape_string($conn, $jenisCucian);
 
-        $result = mysqli_query($conn, $query_idCucian);
+//         // Query to get id_jenis_cucian based on jenis_cucian
+//         $query_idCucian = "SELECT id_jenis_cucian FROM jenis_cucian WHERE jenis_cucian = '$jenisCucian'";
 
-        // Check if the query was successful and if we got a result
-        if ($result && mysqli_num_rows($result) > 0) {
-            $row = mysqli_fetch_assoc($result);
-            $idJenisCucian = $row['id_jenis_cucian'];
-        } else {
-            echo "Jenis cucian tidak ditemukan: $jenisCucian<br>";
-            continue; // Skip this item if no match is found
-        }
+//         $result = mysqli_query($conn, $query_idCucian);
+
+//         // Check if the query was successful and if we got a result
+//         if ($result && mysqli_num_rows($result) > 0) {
+//             $row = mysqli_fetch_assoc($result);
+//             $idJenisCucian = $row['id_jenis_cucian'];
+//         } else {
+//             echo "Jenis cucian tidak ditemukan: $jenisCucian<br>";
+//             continue; // Skip this item if no match is found
+//         }
         
-        $detailQuery = "INSERT INTO detail_laundry (No_Nota, id_jenis_cucian, Harga) 
-                        VALUES ('$noNota', '$idJenisCucian', '$harga')";
+//         $detailQuery = "INSERT INTO detail_laundry (No_Nota, id_jenis_cucian, Harga) 
+//                         VALUES ('$noNota', '$idJenisCucian', '$harga')";
         
-        if (!mysqli_query($conn, $detailQuery)) {
-            echo "Error: " . $detailQuery . "<br>" . mysqli_error($conn);
-        }
-    }
+//         if (!mysqli_query($conn, $detailQuery)) {
+//             echo "Error: " . $detailQuery . "<br>" . mysqli_error($conn);
+//         }
+//     }
 }
+
+    
+    
 ?>
 
 
@@ -219,7 +219,7 @@ if (isset($_POST['simpan_data_nota'])) {
     </style>
 </head>
 <body class="bg-secondary" style="--bs-bg-opacity:.15;">
-<form method="POST" action="">
+<form method="POST" id="main_form" action="">
     <div class="container vh-100">
         <div class="row mb-3 ">
 
@@ -232,7 +232,7 @@ if (isset($_POST['simpan_data_nota'])) {
             <div class="d-flex justify-content-start gap-4 mb-3">
                 <form method="POST" action="">
                 <div class="col">
-                    <input type="text" class="form-control" id="no_hp" name="no_hp" placeholder="Masukan No Handphone Pelanggan">
+                    <input type="text" class="form-control" id="no_hp" name="no_hp" placeholder="Masukan No Handphone Pelanggan" value="<?php echo isset($_POST['no_hp']) ? htmlspecialchars($_POST['no_hp']) : ''; ?>">
                 </div>
                 <div class="col">
                     <button class="btn btn btn-outline-dark" type="submit"  id = "cari_pelanggan" name="cari_pelanggan"><i class="bi bi-search"></i> Cari</button>
@@ -278,8 +278,10 @@ if (isset($_POST['simpan_data_nota'])) {
                 <div class="col me-4">
                     <h6><b>Total Harga</b></h6>
                     <div class="col-md-5">
-                        <fieldset disabled>
-                            <input type="text" id="total_harga" name="total_harga" class="form-control bg-light" value="Rp ">
+                        <fieldset id="field_HargadanBerat" disabled>
+                            <input type="text" id="total_harga" name="total_harga" class="form-control bg-light">
+                            <input type="hidden" name="total_harga_int" id="total_harga_int" value="0">
+                            <input type="hidden" name="total_berat" id="total_berat" value="0">
                         </fieldset >    
                     </div>         
                 </div>
@@ -342,6 +344,7 @@ if (isset($_POST['simpan_data_nota'])) {
                     <div class="form-group">
                         <label for="jumlah">Jumlah Per-Kilogram:</label>
                         <input type="number" class="form-control" id="jumlah" name="jumlah" required>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -398,6 +401,11 @@ if (isset($_POST['simpan_data_nota'])) {
 
 <!-- JavaScript to handle price calculation and table update -->
 <script>
+    document.getElementById('main_form').addEventListener('submit', function() {
+        // Enable the fieldset just before submitting the form
+        document.getElementById('field_HargadanBerat').disabled = false;
+    });
+
     document.addEventListener('DOMContentLoaded', function () {
         const urlParams = new URLSearchParams(window.location.search);
         const message = urlParams.get('message');
@@ -410,20 +418,20 @@ if (isset($_POST['simpan_data_nota'])) {
         }
     });
 
-    function collectData() {
-    const table = document.getElementById('tabel_cucian');
-    const rows = table.getElementsByTagName('tr');
-    let data = [];
+    // function collectData() {
+    // const table = document.getElementById('tabel_cucian');
+    // const rows = table.getElementsByTagName('tr');
+    // let data = [];
 
-    for (let i = 1; i < rows.length; i++) { // Start from 1 to skip table headers
-        const jenisCucian = rows[i].querySelector('[data-jenis="jenis_cucian"]').innerText;
-        const harga = rows[i].querySelector('[data-harga="harga"]').innerText;
+    // for (let i = 1; i < rows.length; i++) { // Start from 1 to skip table headers
+    //     const jenisCucian = rows[i].querySelector('[data-jenis="jenis_cucian"]').innerText;
+    //     const harga = rows[i].querySelector('[data-harga="harga"]').innerText;
 
-        data.push({ jenis_cucian: jenisCucian, harga: harga });
-    }
+    //     data.push({ jenis_cucian: jenisCucian, harga: harga });
+    // }
 
-    document.getElementById('tabelCucianData').value = JSON.stringify(data);
-    }
+    // document.getElementById('tabel_cucian').value = JSON.stringify(data);
+    // }
 
     function showAlertModal(message) {
         document.getElementById('alertMessage').innerText = message;
@@ -489,22 +497,26 @@ function removeRow(button) {
 // Calculate the total price
 function calculateTotal() {
     let total = 0;
+    let totalWeight = 0;
     var rows = document.querySelectorAll('#tabel_cucian tbody tr');
     rows.forEach(row => {
-        var priceText = row.cells[3].innerText.replace('Rp ', '').replace(/,/g, ''); // Hapus simbol mata uang dan semua koma
-        console.log('Original priceText:', row.cells[3].innerText); // Debugging: teks asli dari sel
-        console.log('Cleaned priceText:', priceText); // Debugging: periksa priceText sebelum konversi
+        var priceText = row.cells[3].innerText.replace('Rp ', '').replace(/,/g, ''); 
+        var weightText = row.cells[2].innerText;
         var price = parseFloat(priceText);
-        console.log('Parsed price:', price); // Debugging: periksa nilai price setelah konversi
+        var weight = parseFloat(weightText);
 
         if (!isNaN(price)) {
             total += price;
         }
+        if (!isNaN(weight)) {
+            totalWeight += weight;
+        }
     });
-    // Kalikan total dengan 1000 sebelum format dan menampilkannya
-    let totalMultiplied = total * 1000;
-    document.getElementById('total_harga').value = 'Rp ' + totalMultiplied.toLocaleString('id-ID');
-    console.log('Total after formatting:', document.getElementById('total_harga').value); // Debugging: hasil akhir yang ditampilkan
+    let Multipled_total = total*1000
+    
+    document.getElementById('total_harga').value = 'Rp ' + Multipled_total.toLocaleString('id-ID');
+    document.getElementById('total_harga_int').value = Multipled_total;
+    document.getElementById('total_berat').value = totalWeight;
 }
 
 
