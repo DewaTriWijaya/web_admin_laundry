@@ -1,6 +1,5 @@
 <?php
 include "koneksi.php";
-
 $result = null; // Inisialisasi variabel $result
 
 if (isset($_POST['cari'])) {
@@ -104,9 +103,23 @@ $conn->close(); // Menutup koneksi setelah selesai
     </div>
         </div>
         <div class="d-flex justify-content-start mt-4">
-            <button type="button" class="btn btn-success px-4">Unduh</button>
+            <button type="button" class="btn btn-success px-4" onclick="downloadExcel()">Unduh</button>
         </div>
     </div>
 </div>
+
+<script>
+    function downloadExcel() {
+        const start_date = document.querySelector('input[name="start_date"]').value;
+        const end_date = document.querySelector('input[name="end_date"]').value;
+        let url = 'export_excel.php';
+
+        if (start_date && end_date) {
+            url += `?start_date=${start_date}&end_date=${end_date}`;
+        }
+
+        window.location.href = url;
+    }
+</script>
 </body>
 </html>
