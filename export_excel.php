@@ -10,9 +10,9 @@ $start_date = $_GET['start_date'] ?? '';
 $end_date = $_GET['end_date'] ?? '';
 
 if (empty($start_date) || empty($end_date)) {
-    $query = "SELECT * FROM Nota";
+    $query = "SELECT * FROM nota";
 } else {
-    $query = "SELECT * FROM Nota WHERE Tgl_masuk BETWEEN '$start_date' AND '$end_date'";
+    $query = "SELECT * FROM nota WHERE tgl_masuk BETWEEN '$start_date' AND '$end_date'";
 }
 
 $result = $conn->query($query);
@@ -29,9 +29,9 @@ $sheet->setCellValue('C1', 'Tanggal');
 
 $row = 2;
 while ($data = mysqli_fetch_assoc($result)) {
-    $sheet->setCellValue('A' . $row, $data['No_Nota']);
-    $sheet->setCellValue('B' . $row, $data['Total_Harga']);
-    $sheet->setCellValue('C' . $row, date('m/d/y', strtotime($data['Tgl_masuk'])));
+    $sheet->setCellValue('A' . $row, $data['no_nota']);
+    $sheet->setCellValue('B' . $row, $data['harga_total_bayar']);
+    $sheet->setCellValue('C' . $row, date('m/d/y', strtotime($data['tgl_masuk'])));
     $row++;
 }
 
