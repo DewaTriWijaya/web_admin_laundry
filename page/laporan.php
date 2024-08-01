@@ -55,12 +55,15 @@ $conn->close(); // Menutup koneksi setelah selesai
             background: white;
             z-index: 1000;
         }
+        .home-uhuy {
+            margin-left: 300px;
+        }
 
     </style>
     <title>Laporan</title>
 </head>
 <body class="bg-secondary" style="--bs-bg-opacity: .15;">
-<div class="container vh-100">
+<div class="container vh-100 home-uhuy">
     <div class="row">
         <h2 class="fw-bold mb-5">Laporan Laundry</h2>
         <h4 class="mb-4">Masukkan Jangka Waktu</h4>

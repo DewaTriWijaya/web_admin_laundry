@@ -43,9 +43,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pendaftaran Pelanggan</title>
+
+    <style>
+        .home-uhuy {
+            margin-left: 300px;
+        }
+    </style>
 </head>
 <body class="bg-secondary" style="--bs-bg-opacity: .15;">
-    <div class="container-fluid h-100 d-flex flex-column vh-100">
+    <div class="container-fluid h-100 d-flex flex-column vh-100 home-uhuy">
         <div class="row">
             <div class="col">
                 <h2 class="fw-bold mb-5">Pendaftaran Pelanggan</h2>

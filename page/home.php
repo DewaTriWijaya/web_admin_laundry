@@ -9,8 +9,7 @@ if (!$conn) {
 // SQL query to count total number of nota
 $sql_total = "SELECT COUNT(*) AS total_nota FROM nota";
 $result_total = mysqli_query($conn, $sql_total);
-
-$total_nota = 0; // Initialize variable
+$total_nota = 0;
 
 if ($result_total) {
     $row = mysqli_fetch_assoc($result_total);
@@ -20,10 +19,10 @@ if ($result_total) {
 }
 
 // SQL query to count unfinished laundry
-$sql_unfinished = "SELECT COUNT(*) AS status_belum FROM status_laundry WHERE status_laundry = 'Belum'";
+$sql_unfinished = "SELECT COUNT(*) AS status_belum FROM statuslaundry WHERE status_laundry = 'Belum'";
 $result_unfinished = mysqli_query($conn, $sql_unfinished);
 
-$total_unfinished = 0; // Initialize variable
+$total_unfinished = 0;
 
 if ($result_unfinished) {
     $row = mysqli_fetch_assoc($result_unfinished);
@@ -33,7 +32,7 @@ if ($result_unfinished) {
 }
 
 // SQL query to count finished laundry
-$sql_finished = "SELECT COUNT(*) AS status_selesai FROM status_laundry WHERE status_laundry = 'Selesai'";
+$sql_finished = "SELECT COUNT(*) AS status_selesai FROM statuslaundry WHERE status_laundry = 'Selesai'";
 $result_finished = mysqli_query($conn, $sql_finished);
 
 $total_finished = 0; // Initialize variable
@@ -48,14 +47,14 @@ if ($result_finished) {
 // SQL query to get transaction counts per month
 $sql_transactions_per_month = "
     SELECT 
-        DATE_FORMAT(Tgl_masuk, '%Y-%m') AS month, 
+        DATE_FORMAT(tgl_masuk, '%Y-%m') AS month, 
         COUNT(*) AS transaction_count 
     FROM 
         nota 
     GROUP BY 
-        DATE_FORMAT(Tgl_masuk, '%Y-%m')
+        DATE_FORMAT(tgl_masuk, '%Y-%m')
     ORDER BY 
-        DATE_FORMAT(Tgl_masuk, '%Y-%m')
+        DATE_FORMAT(tgl_masuk, '%Y-%m')
 ";
 $result_transactions_per_month = mysqli_query($conn, $sql_transactions_per_month);
 
@@ -141,13 +140,96 @@ if ($result_transactions_per_month) {
             /* Minimum width to ensure responsiveness */
             margin: 10px;
         }
+
+        /* Flexbox container */
+        .card-container-between {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Full width card */
+        .card.full-width {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Fixed width card */
+        .card.fixed-width {
+            width: 350px;
+        }
+
+        /* Card styling */
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Card header styling */
+        .card-header {
+            background-color: #f5f5f5;
+            padding: 0.75rem;
+            border-bottom: 1px solid #ddd;
+            font-weight: bold;
+        }
+
+        /* Card body styling */
+        .card-body {
+            padding: 0.75rem;
+        }
+
+        /* Chart container styling */
+        .chart-container,
+        .chart-container-uhuy {
+            position: relative;
+            height: 100%;
+        }
+
+        /* Chart item styling */
+        .chart-item-uhuy {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Chart text styling */
+        .chart-text {
+            position: absolute;
+            text-align: center;
+        }
+
+        .table td,
+        .table th {
+            padding: 8px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .table-fixed-header {
+            height: 250px;
+            overflow-y: auto;
+        }
+
+        .table-fixed-header thead th {
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 1000;
+        }
+        .home-uhuy {
+            margin-left: 300px;
+        }
     </style>
 
     <title>Transaksi</title>
 </head>
 
 <body class="bg-secondary" style="--bs-bg-opacity: .15;">
-    <div class="container vh-100">
+    <div class="container vh-100 home-uhuy">
         <h2 class="fw-bold mb-3">Transaksi</h2>
 
         <!-- Card Section -->
@@ -156,7 +238,7 @@ if ($result_transactions_per_month) {
                 <!-- Card 1 -->
                 <div class="card flex-fill mx-2" style="width: 18rem;">
                     <div class="card-body">
-                        <h5 class="card-title">Transaksi</h5>
+                        <h5 class="bi bi-wallet2 card-title">Transaksi</h5>
                         <p class="card-text"><?php echo $total_nota; ?></p>
                     </div>
                 </div>
@@ -164,7 +246,7 @@ if ($result_transactions_per_month) {
                 <!-- Card 2 -->
                 <div class="card flex-fill mx-2" style="width: 18rem;">
                     <div class="card-body">
-                        <h5 class="card-title">Status Proses</h5>
+                        <h5 class="bi bi-hourglass-split card-title">Status Belum</h5>
                         <p class="card-text"><?php echo $total_unfinished; ?></p>
                     </div>
                 </div>
@@ -172,20 +254,20 @@ if ($result_transactions_per_month) {
                 <!-- Card 3 -->
                 <div class="card flex-fill mx-2" style="width: 18rem;">
                     <div class="card-body">
-                        <h5 class="card-title">Status Selesai</h5>
+                        <h5 class="bi bi-check-circle card-title">Status Selesai</h5>
                         <p class="card-text"><?php echo $total_finished; ?></p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="container mt-5">
+        <div class="container mt-2">
             <div class="card-container-between">
 
                 <!-- Chart Card Transaksi -->
-                <div class="card">
+                <div class="card full-width">
                     <div class="card-header">
-                        Grafik Transaksi Per Bulan
+                        Transaksi Per-Bulan
                     </div>
                     <div class="card-body">
                         <div class="chart-container">
@@ -195,7 +277,7 @@ if ($result_transactions_per_month) {
                 </div>
 
                 <!-- Chart Card Status -->
-                <div class="card">
+                <div class="card fixed-width">
                     <div class="card-header">
                         Transaksi Selesai / Belum
                     </div>
@@ -210,16 +292,17 @@ if ($result_transactions_per_month) {
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
 
         <!-- Tabel Card -->
-        <div class="card">
+        <div class="card mt-2">
             <div class="card-header">
-                Tabel Transaksi
+                Transaksi
             </div>
-            <div class="card-body">
-                <div class="chart-container">
+            <div class="table-wrapper card m-4">
+            <div class="table-fixed-header">
                     <table class="table table-striped table-bordered">
                         <thead>
                             <tr>
@@ -238,32 +321,32 @@ if ($result_transactions_per_month) {
                             <?php
                             // Fetch data from database with JOIN
                             $sql = "SELECT 
-                                    t.No_Nota, 
-                                    t.No_HP, 
+                                    t.no_nota, 
+                                    t.no_hp, 
                                     p.nama, 
-                                    t.Berat_cucian, 
-                                    t.Total_Harga, 
-                                    t.Tgl_masuk, 
-                                    t.Estimasi_selesai, 
-                                    t.Jenis_pembayaran, 
+                                    t.berat_cucian, 
+                                    t.harga_total_bayar, 
+                                    t.tgl_masuk, 
+                                    t.estimasi_selesai, 
+                                    t.jenis_pembayaran, 
                                     s.status_laundry 
                                 FROM nota t
-                                JOIN pelanggan p ON t.No_HP = p.No_HP
-                                JOIN status_laundry s ON t.No_Nota = s.No_Nota";
+                                JOIN pelanggan p
+                                JOIN statuslaundry s";
                             $result = $conn->query($sql);
 
                             if ($result->num_rows > 0) {
                                 // Output data of each row
                                 while ($row = $result->fetch_assoc()) {
                                     echo "<tr>
-                                        <td>{$row['No_Nota']}</td>
-                                        <td>{$row['No_HP']}</td>
+                                        <td>{$row['no_nota']}</td>
+                                        <td>{$row['no_hp']}</td>
                                         <td>{$row['nama']}</td>
-                                        <td>{$row['Berat_cucian']}</td>
-                                        <td>{$row['Total_Harga']}</td>
-                                        <td>{$row['Tgl_masuk']}</td>
-                                        <td>{$row['Estimasi_selesai']}</td>
-                                        <td>{$row['Jenis_pembayaran']}</td>
+                                        <td>{$row['berat_cucian']}</td>
+                                        <td>{$row['harga_total_bayar']}</td>
+                                        <td>{$row['tgl_masuk']}</td>
+                                        <td>{$row['estimasi_selesai']}</td>
+                                        <td>{$row['jenis_pembayaran']}</td>
                                         <td>{$row['status_laundry']}</td>
                                     </tr>";
                                 }
@@ -275,7 +358,7 @@ if ($result_transactions_per_month) {
                             $sql_chart = "SELECT 
                             SUM(CASE WHEN status_laundry = 'Selesai' THEN 1 ELSE 0 END) AS Selesai, 
                             SUM(CASE WHEN status_laundry != 'Selesai' THEN 1 ELSE 0 END) AS Belum
-                                FROM status_laundry;";
+                                FROM statuslaundry;";
                             $result_chart = $conn->query($sql_chart);
                             $chart_data = $result_chart->fetch_assoc();
 
@@ -286,17 +369,13 @@ if ($result_transactions_per_month) {
                 </div>
             </div>
         </div>
-
     </div>
-
-
-
 
     <script>
         const months = <?php echo json_encode($months); ?>;
         const transactionCounts = <?php echo json_encode($transaction_counts); ?>;
 
-        // Create the chart
+        // Create the chart Bar
         const ctx = document.getElementById('transactionsChart').getContext('2d');
         new Chart(ctx, {
             type: 'bar',
@@ -324,7 +403,7 @@ if ($result_transactions_per_month) {
             }
         });
 
-
+        // Create the chart Pie
         var ctx12 = document.getElementById('doughnutChart').getContext('2d');
         var totalAktivitas = <?php echo $chart_data['Selesai'] + $chart_data['Belum']; ?>;
         var persentaseBerhasil = Math.round((<?php echo $chart_data['Selesai']; ?> / totalAktivitas) * 100);

@@ -8,7 +8,7 @@ if (!$conn) {
 }
 
 // Mengambil semua data dari tabel status_laundry yang statusnya 'Belum' atau 'Selesai' yang belum diberitahukan
-$sql = "SELECT * FROM Status_Laundry WHERE status_laundry='Belum' OR (status_laundry='Selesai' AND notified=0)";
+$sql = "SELECT * FROM statuslaundry WHERE status_laundry='Belum' OR (status_laundry='Selesai')";
 $result = mysqli_query($conn, $sql);
 
 $success = false;
@@ -17,7 +17,7 @@ $success = false;
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Mengambil data dari form
     $status_laundry = $_POST['status'];
-    $No_Nota = $_POST['No_Nota'];
+    $No_Nota = $_POST['no_nota'];
     $tanggal_selesai = $_POST['tanggal_selesai'];
 
     // Menyiapkan query SQL untuk memperbarui setiap baris
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $status = $status_laundry[$index];
         $tanggal = $tanggal_selesai[$index];
         
-        $sql = "UPDATE Status_Laundry SET tanggal_selesai='$tanggal', status_laundry='$status' WHERE No_Nota='$nota'";
+        $sql = "UPDATE statuslaundry SET tanggal_selesai='$tanggal', status_laundry='$status' WHERE no_nota='$nota'";
 
         // Menjalankan query dan memeriksa apakah berhasil
         if ($conn->query($sql) === TRUE) {
@@ -88,12 +88,15 @@ $conn->close();
             max-height: 300px;
             overflow-y: auto;
         }
+        .home-uhuy {
+            margin-left: 300px;
+        }
     </style>
     <!-- Link jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="bg-secondary" style="--bs-bg-opacity: .15;">
-    <div class="container vh-100">
+    <div class="container vh-100 home-uhuy">
         <div class="row">
             <h2 class="fw-bold mb-5">Informasi Status Laundry</h2>
             <div class="justify-content-center">
@@ -114,14 +117,14 @@ $conn->close();
                                     if (mysqli_num_rows($result) > 0) {
                                         while ($row = mysqli_fetch_assoc($result)) {
                                             $status = $row["status_laundry"];
-                                            echo "<tr id='row-".$row['No_Nota']."'>";
-                                            echo "<td scope='row' class='text-center'><input type='hidden' name='No_Nota[]' value='".$row['No_Nota']."'>".$row['No_Nota']."</td>";
+                                            echo "<tr id='row-".$row['no_nota']."'>";
+                                            echo "<td scope='row' class='text-center'><input type='hidden' name='No_Nota[]' value='".$row['no_nota']."'>".$row['no_nota']."</td>";
                                             echo "<td><input type='date' class='form-control' name='tanggal_selesai[]' value='".$row['tanggal_selesai']."'></td>";
                                             echo "<td class='text-center'><select name='status[]' class='form-select'>";
                                             echo "<option value='Belum'" . ($status == 'Belum' ? " selected" : "") . ">Belum</option>";
                                             echo "<option value='Selesai'" . ($status == 'Selesai' ? " selected" : "") . ">Selesai</option>";
                                             echo "</select></td>";
-                                            echo "<td><button type='button' class='btn btn-primary notification-btn' data-nota='".$row['No_Nota']."' data-status='".$status."' data-tanggal='".$row['tanggal_selesai']."'>Pemberitahuan</button></td>";
+                                            echo "<td><button type='button' class='btn btn-primary notification-btn' data-nota='".$row['no_nota']."' data-status='".$status."' data-tanggal='".$row['tanggal_selesai']."'>Pemberitahuan</button></td>";
                                             echo "</tr>";
                                         }
                                     }

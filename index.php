@@ -19,13 +19,19 @@
         body {
             font-family: poppins;
         }
+
+        .index-uhuy{
+            position: fixed;
+            width: 300px;
+            height: 100%;
+        }
     </style>
     <title>Laundry</title>
 </head>
 
 <body>
     <div class="d-flex">
-        <div class="p-4 bg-custom menu">
+        <div class="p-4 bg-custom menu index-uhuy">
             <div class="d-flex gap-4">
                 <img src="img/Logo.png" alt="logo" class="w-25 h-25">
                 <div class="text-white align-self-center">
@@ -69,7 +75,7 @@
             </div>
         </div>
 
-        <div class="p-5 d-flex w-100">
+        <div class="p-3 d-flex w-100">
             <?php
             if (isset($_GET['page'])) {
                 $page = $_GET['page'];

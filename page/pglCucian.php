@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
     } else {
         $idJenisCucian = generateId($jenisCucian);
         // Use prepared statement to prevent SQL injection
-        $stmt = $conn->prepare("INSERT INTO Jenis_Cucian (id_jenis_cucian, jenis_cucian, harga) VALUES (?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO jeniscucian (id_jenis_cucian, jenis_cucian, harga_satuan_kilo) VALUES (?, ?, ?)");
         $stmt->bind_param("ssi", $idJenisCucian, $jenisCucian, $hargaCucian);
 
         if ($stmt->execute()) {
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add'])) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['delete'])) {
     $idJenisCucian = $_POST['idJenisCucian'];
 
-    $stmt = $conn->prepare("DELETE FROM Jenis_Cucian WHERE id_jenis_cucian = ?");
+    $stmt = $conn->prepare("DELETE FROM jeniscucian WHERE id_jenis_cucian = ?");
     $stmt->bind_param("s", $idJenisCucian);
 
     if ($stmt->execute()) {
@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit'])) {
       </script>";
     } else {
         // Use prepared statement to prevent SQL injection
-        $stmt = $conn->prepare("UPDATE Jenis_Cucian SET jenis_cucian = ?, harga = ? WHERE id_jenis_cucian = ?");
+        $stmt = $conn->prepare("UPDATE jeniscucian SET jenis_cucian = ?, harga_satuan_kilo = ? WHERE id_jenis_cucian = ?");
         $stmt->bind_param("sis", $jenisCucian, $hargaCucian, $idJenisCucian);
 
         if ($stmt->execute()) {
@@ -107,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit'])) {
 }
 
 // Retrieve data from database
-$sql = "SELECT * FROM Jenis_Cucian";
+$sql = "SELECT * FROM jeniscucian";
 $result = mysqli_query($conn, $sql);
 ?>
 
@@ -178,12 +178,15 @@ $result = mysqli_query($conn, $sql);
         .modal-header .bi-exclamation-circle-fill {
             font-size: 1.5rem;
         }
+        .home-uhuy {
+            margin-left: 300px;
+        }
     </style>
     <title>Pengelolaan Cucian</title>
 </head>
 
 <body class="bg-secondary" style="--bs-bg-opacity: .15;">
-    <div class="container vh-100">
+    <div class="container vh-100 home-uhuy">
         <h2 class="fw-bold mb-3">Pengelolaan Cucian</h2>
         <h5 class="card-title mb-2">Daftar Jenis Cucian</h5>
 
@@ -208,12 +211,12 @@ $result = mysqli_query($conn, $sql);
                                 echo "<tr>";
                                 echo '<td class="text-center">' . $no . "</td>";
                                 echo "<td>" . htmlspecialchars($row['jenis_cucian']) . "</td>";
-                                echo "<td>Rp. " . number_format($row['harga'], 0, ',', '.') . "</td>";
+                                echo "<td>Rp. " . number_format($row['harga_satuan_kilo'], 0, ',', '.') . "</td>";
                                 echo '<td class="text-center">
                                     <button type="button" class="btn btn-link p-0 btn-lg" onclick="showConfirmationModal(\'' . htmlspecialchars($row['id_jenis_cucian']) . '\')">
                                         <i class="bi bi-trash text-danger"></i>
                                     </button>
-                                    <button class="btn btn-lg" type="button" data-bs-toggle="modal" data-bs-target="#editModal" data-id="' . htmlspecialchars($row['id_jenis_cucian']) . '" data-jenis="' . htmlspecialchars($row['jenis_cucian']) . '" data-harga="' . htmlspecialchars($row['harga']) . '">
+                                    <button class="btn btn-lg" type="button" data-bs-toggle="modal" data-bs-target="#editModal" data-id="' . htmlspecialchars($row['id_jenis_cucian']) . '" data-jenis="' . htmlspecialchars($row['jenis_cucian']) . '" data-harga="' . htmlspecialchars($row['harga_satuan_kilo']) . '">
                                         <i class="bi bi-pencil-square text-secondary"></i>
                                     </button>
                                 </td>';
