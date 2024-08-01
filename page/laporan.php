@@ -105,7 +105,7 @@ $conn->close(); // Menutup koneksi setelah selesai
         </div>
     </div>
         </div>
-        <div class="d-flex justify-content-start mt-4">
+        <div class="d-flex justify-content-end mt-4">
             <button type="button" class="btn btn-success px-4" onclick="downloadExcel()">Unduh</button>
         </div>
     </div>
