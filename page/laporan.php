@@ -92,9 +92,9 @@ $conn->close(); // Menutup koneksi setelah selesai
                     if (isset($result)) {
                         while ($row = mysqli_fetch_assoc($result)) {
                             echo "<tr>";
-                            echo "<td class='text-center'>{$row['No_Nota']}</td>";
-                            echo "<td class='text-center'>Rp. " . number_format($row['Total_Harga'], 0, ',', '.') . "</td>";
-                            echo "<td class='text-center'>" . date('m/d/y', strtotime($row['Tgl_masuk'])) . "</td>";
+                            echo "<td class='text-center'>{$row['no_nota']}</td>";
+                            echo "<td class='text-center'>Rp. " . number_format($row['harga_total_bayar'], 0, ',', '.') . "</td>";
+                            echo "<td class='text-center'>" . date('m/d/y', strtotime($row['tgl_masuk'])) . "</td>";
                             echo "</tr>";
                         }
                     }
