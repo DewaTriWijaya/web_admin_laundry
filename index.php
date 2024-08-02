@@ -12,9 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
     <style>
-        .menu {
-            width: 350px;
-        }
+
 
         body {
             font-family: poppins;
@@ -31,7 +29,7 @@
 
 <body>
     <div class="d-flex">
-        <div class="p-4 bg-custom menu index-uhuy">
+        <div class="p-4 bg-custom index-uhuy">
             <div class="d-flex gap-4">
                 <img src="img/Logo.png" alt="logo" class="w-25 h-25">
                 <div class="text-white align-self-center">
