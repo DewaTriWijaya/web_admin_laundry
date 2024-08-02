@@ -76,6 +76,12 @@ $fileName = "Laporan_Laundry_" . date('Y-m-d') . ".xlsx";
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 header('Content-Disposition: attachment; filename="' . $fileName . '"');
 header('Cache-Control: max-age=0');
+
 $writer->save('php://output');
+echo "<pre>";
+while ($data = mysqli_fetch_assoc($result)) {
+    print_r($data);  // Menampilkan data untuk debugging
+}
+echo "</pre>";
 exit();
 ?>
