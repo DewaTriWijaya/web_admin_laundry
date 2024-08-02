@@ -45,22 +45,14 @@
                     <a class="text-white" href="index.php?page=pendaftaran" style="text-decoration:none">Pendaftaran</a>
                 </div>
 
-                <div class="side-menu d-flex align-items-center" onclick="openHomeAndToggleDropdown()">
-                    <img src="img/transaksi.png" alt="transaksi" class="me-2">
-                    <a id="transaksi-link" data-bs-toggle="collapse" href="#transaksiEx" role="button" aria-expanded="false" aria-controls="transaksiEx" class="text-white" style="text-decoration:none">Transaksi</a>
+                <div class="side-menu" onclick="window.location.href='index.php?page=pglTransaksi'">
+                    <img src="img/tag.png" alt="transaksi">
+                    <a class="text-white" href="index.php?page=pglTransaksi" style="text-decoration:none">Pengelolaan Transaksi</a>
                 </div>
 
-                <div class="collapse <?php echo isset($_GET['menu']) && $_GET['menu'] === 'transaksi' ? 'show' : ''; ?>" id="transaksiEx">
-                    <div class="submenu ms-3">
-                        <div class="side-menu" onclick="window.location.href='index.php?page=pglTransaksi&menu=transaksi'">
-                            <img src="img/notebook.png" alt="pendaftaran">
-                            <a class="text-white" href="index.php?page=pglTransaksi&menu=transaksi" style="text-decoration:none">Kelola Transaksi</a>
-                        </div>
-                        <div class="submenu-item side-menu d-flex align-items-center" onclick="window.location.href='index.php?page=pglCucian&menu=transaksi'">
-                            <img src="img/washing.png" alt="pendaftaran">
-                            <a class="text-white" href="index.php?page=pglCucian&menu=transaksi" style="text-decoration:none">Kelola Cucian</a>
-                        </div>
-                    </div>
+                <div class="side-menu" onclick="window.location.href='index.php?page=pglCucian'">
+                    <img src="img/washing.png" alt="cucian">
+                    <a class="text-white" href="index.php?page=pglCucian" style="text-decoration:none">Pengelolaan Cucian</a>
                 </div>
 
                 <div class="side-menu" onclick="window.location.href='index.php?page=laporan'">
