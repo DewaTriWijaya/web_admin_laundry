@@ -85,8 +85,6 @@ if (isset($_POST['simpan_data_nota'])) {
         $query_status = "INSERT INTO statuslaundry (no_nota, status_laundry, tanggal_selesai) 
                          VALUES ('$noNota', 'Belum' , '$estimasiSelesai')";
 
-        // Bjirrr
-        error_log("Pesan kesalahan atau log informasi $jenisCucian / $noNota / $", 3, "/path/to/custom.log");
         if (mysqli_query($conn, $query) && mysqli_query($conn, $query_status)) {
             echo "<script>document.addEventListener('DOMContentLoaded', function() { showAlertModal('Data Berhasil disimpan'); });</script>";
         } else {
@@ -98,71 +96,13 @@ if (isset($_POST['simpan_data_nota'])) {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Status Laundry</title>
-    <style>
-        .modal-header .bi-exclamation-circle-fill {
-            font-size: 1.5rem;
-        }
-
-        .modal-title {
-            display: flex;
-            align-items: center;
-        }
-
-        .modal-body {
-            font-size: 1.1rem;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-
-        .modal-footer .btn-success {
-            width: 100px;
-        }
-
-        .modal-header .bi-question-circle-fill,
-        .modal-header .bi-exclamation-circle-fill {
-            font-size: 1.5rem;
-        }
-
-        .modal-body {
-            font-size: 1.1rem;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-
-        .table td,
-        .table th {
-            padding: 8px;
-        }
-
-        .table-wrapper {
-            overflow-x: auto;
-        }
-
-        .table-fixed-header {
-            height: 190px;
-            overflow-y: auto;
-        }
-
-        .table-fixed-header thead th {
-            position: sticky;
-            top: 0;
-            background: white;
-            z-index: 1000;
-        }
-
-        .home-uhuy {
-            margin-left: 300px;
-        }
-    </style>
+    <link rel="stylesheet" href="page/pglTransaksi/pglTransaksi.css">
 </head>
 
 <body class="bg-secondary" style="--bs-bg-opacity:.15;">
@@ -220,7 +160,6 @@ if (isset($_POST['simpan_data_nota'])) {
 
                     </tbody>
                 </table>
-
             </div>
 
 
@@ -232,6 +171,8 @@ if (isset($_POST['simpan_data_nota'])) {
                             <input type="date" class="form-control" name="tanggal_transaksi">
                         </div>
                     </div>
+
+                    <!-- Total Harga -->
                     <div class="col me-4">
                         <h6><b>Total Harga</b></h6>
                         <div class="col-md-5">
@@ -245,12 +186,16 @@ if (isset($_POST['simpan_data_nota'])) {
                 </div>
 
                 <div class="row mb-5">
+
+                    <!-- Estmasi Selesai -->
                     <div class="col me-4">
                         <h6><b>Estimasi Selesai</b></h6>
                         <div class="col-md-7">
                             <input type="date" class="form-control" name="estimasi_selesai">
                         </div>
                     </div>
+
+                    <!-- Pembayaran -->
                     <div class="col me-4">
                         <h6><b>Pembayaran<b></h6>
                         <div class="d-flex flex-row mb-3">
@@ -281,10 +226,8 @@ if (isset($_POST['simpan_data_nota'])) {
                     <button type="button" class="btn btn-danger p-2 px-4">Hapus</button>
                 </div>
             </div>
-
         </div>
     </form>
-
 
     <!-- Add Jenis Cucian Modal -->
     <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
@@ -317,7 +260,6 @@ if (isset($_POST['simpan_data_nota'])) {
             </div>
         </div>
     </div>
-
 
     <!-- peringatan data tidak ada Modal -->
     <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
@@ -426,16 +368,15 @@ if (isset($_POST['simpan_data_nota'])) {
                     var existingJumlah = parseFloat(existingRow.cells[2].innerText);
                     var newJumlah = existingJumlah + jumlahFloat;
                     existingRow.cells[2].innerText = newJumlah;
-                    existingRow.cells[3].innerText = 'Rp ' + (jenisCucian[selectedJenisId] * newJumlah).toLocaleString('id-ID');
+                    existingRow.cells[3].innerText = 'Rp ' + (jenisCucian[selectedJenisId] * newJumlah).toLocaleString('id-ID'); 
                 } else {
                     var newRow = table.insertRow();
                     newRow.innerHTML = `
-                <td>${table.rows.length}</td>
-                <td>${selectedJenis}</td>
-                <td>${jumlahFloat}</td>
-                <td>Rp ${price.toLocaleString('id-ID')}</td>
-                <td><button class="btn btn-danger btn-sm" onclick="removeRow(this)">Delete</button></td>
-            `;
+                    <td>${table.rows.length}</td>
+                    <td>${selectedJenis}</td>
+                    <td>${jumlahFloat}</td>
+                    <td>Rp ${price.toLocaleString('id-ID')}</td>
+                    <td><button class="btn btn-danger btn-sm" onclick="removeRow(this)">Delete</button></td>`;
                 }
                 document.getElementById('jenis_cucian').value = '';
                 document.getElementById('jumlah').value = '';
