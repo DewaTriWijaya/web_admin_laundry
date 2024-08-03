@@ -241,14 +241,14 @@ if (isset($_POST['simpan_data_nota'])) {
                     <form method="POST" action="">
                         <div class="form-group">
                             <label for="jenis_cucian">Jenis Cucian:</label>
-                            <select class="form-control" id="jenis_cucian" name="jenis_cucian" required>
+                            <select class="form-control" id="jenis_cucian" name="jenis_cucian" required="" oninvalid="this.setCustomValidity('Tolong Pilih Jenis Cucian!')" oninput="setCustomValidity('')">
                                 <option value="">Pilih Jenis Cucian</option>
                                 <?= $jenisCucianOptions; ?>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="jumlah">Jumlah Per-Kilogram:</label>
-                            <input type="number" class="form-control" id="jumlah" name="jumlah" required>
+                            <input type="number" class="form-control" id="jumlah" name="jumlah" required="" oninvalid="this.setCustomValidity('Tolong Isi Jumlah Kilogram !')" oninput="setCustomValidity('')">
 
                         </div>
                         <div class="modal-footer">

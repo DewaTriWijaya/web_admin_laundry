@@ -178,13 +178,13 @@ $result = mysqli_query($conn, $sql);
                     <div class="form-group p-2">
                         <label for="jenisCucian">Jenis Cucian</label>
                         <input type="text" class="form-control" id="jenisCucian" name="jenisCucian"
-                            placeholder="Masukan Jenis Cucian" required>
+                            placeholder="Masukan Jenis Cucian" required="" oninvalid="this.setCustomValidity('Tolong isi form ini!')" oninput="setCustomValidity('')">
                     </div>
 
                     <div class="form-group p-2">
                         <label for="hargaCucian">Harga Cucian</label>
                         <input type="number" class="form-control" id="hargaCucian" name="hargaCucian"
-                            placeholder="Masukan Harga Cucian" required>
+                            placeholder="Masukan Harga Cucian" required="" oninvalid="this.setCustomValidity('Tolong isi form ini!')" oninput="setCustomValidity('')">
                     </div>
 
                     <div class="form-group p-2">
@@ -233,13 +233,13 @@ $result = mysqli_query($conn, $sql);
                             <div class="form-group p-2">
                                 <label for="editJenisCucian">Jenis Cucian</label>
                                 <input type="text" class="form-control" id="editJenisCucian" name="editJenisCucian"
-                                    placeholder="Masukan Jenis Cucian" required>
+                                    placeholder="Masukan Jenis Cucian" required="" oninvalid="this.setCustomValidity('Tolong isi form ini!')" oninput="setCustomValidity('')">
                             </div>
 
                             <div class="form-group p-2">
                                 <label for="editHargaCucian">Harga Cucian</label>
                                 <input type="number" class="form-control" id="editHargaCucian" name="editHargaCucian"
-                                    placeholder="Masukan Harga Cucian" required>
+                                    placeholder="Masukan Harga Cucian" required="" oninvalid="this.setCustomValidity('Tolong isi form ini!')" oninput="setCustomValidity('')">
                             </div>
 
                             <div class="form-group p-2">
