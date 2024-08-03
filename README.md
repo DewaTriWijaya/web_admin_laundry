@@ -11,6 +11,12 @@ Tiap kontributor hanya boleh mengubah halaman masing-masing dan tidak boleh meng
 git clone https://github.com/DewaTriWijaya/web_admin_laundry.git
 ```
 
+### Clone Repository dari branch main_dev
+
+```bash
+git clone -b main_dev https://github.com/DewaTriWijaya/web_admin_laundry.git
+```
+
 ### Cek Koneksi Remote
 ```bash
 git remote -v
