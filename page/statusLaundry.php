@@ -7,8 +7,8 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-// Mengambil semua data dari tabel status_laundry yang statusnya 'Belum' atau 'Selesai' yang belum diberitahukan
-$sql = "SELECT * FROM statuslaundry WHERE status_laundry='Belum' OR (status_laundry='Selesai')";
+// Mengambil semua data dari tabel status_laundry
+$sql = "SELECT * FROM statuslaundry";
 $result = mysqli_query($conn, $sql);
 
 $success = false;
@@ -39,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 // Menutup koneksi database
 $conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -88,9 +89,11 @@ $conn->close();
             max-height: 300px;
             overflow-y: auto;
         }
+
         .home-uhuy {
             margin-left: 300px;
         }
+
     </style>
     <!-- Link jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -98,7 +101,7 @@ $conn->close();
 <body class="bg-secondary" style="--bs-bg-opacity: .15;">
     <div class="container vh-100 home-uhuy">
         <div class="row">
-            <h2 class="fw-bold mb-5">Status Laundry</h2>
+            <h2 class="fw-bold mb-5">Informasi Status Laundry</h2>
             <div class="justify-content-center">
                 <form method="POST" action="">
                     <div class="table-container">
@@ -117,8 +120,8 @@ $conn->close();
                                     if (mysqli_num_rows($result) > 0) {
                                         while ($row = mysqli_fetch_assoc($result)) {
                                             $status = $row["status_laundry"];
-                                            echo "<tr id='row-".$row['no_nota']."'>";
-                                            echo "<td scope='row' class='text-center'><input type='hidden' name='No_Nota[]' value='".$row['no_nota']."'>".$row['no_nota']."</td>";
+                                            echo "<tr>";
+                                            echo "<td scope='row' class='text-center'><input type='hidden' name='no_nota[]' value='".$row['no_nota']."'>".$row['no_nota']."</td>";
                                             echo "<td><input type='date' class='form-control' name='tanggal_selesai[]' value='".$row['tanggal_selesai']."'></td>";
                                             echo "<td class='text-center'><select name='status[]' class='form-select'>";
                                             echo "<option value='Belum'" . ($status == 'Belum' ? " selected" : "") . ">Belum</option>";
@@ -184,7 +187,7 @@ $conn->close();
         <?php } ?>
 
         // Menambahkan event listener untuk tombol tutup modal sukses
-        document.getElementById("successClose").onclick = function () {
+         document.getElementById("successClose").onclick = function () {
             successModal.style.display = "none";
             window.location.href = window.location.href;
         };
@@ -235,23 +238,6 @@ $conn->close();
                 success: function(response) {
                     confirmationModal.style.display = "none";
                     alert("Informasi status telah diberitahukan kepada pelanggan.");
-                    
-                    // Update status notified di database hanya jika status adalah 'Selesai'
-                    if (selectedData.status === 'Selesai') {
-                        $.ajax({
-                            url: 'update_notified.php',
-                            type: 'POST',
-                            data: { nota: selectedData.nota },
-                            success: function(response) {
-                                console.log("Status notified diperbarui.");
-                                // Hapus baris dari tabel jika status Selesai
-                                document.getElementById('row-' + selectedData.nota).style.display = 'none';
-                            },
-                            error: function(error) {
-                                console.error("Gagal memperbarui status notified.");
-                            }
-                        });
-                    }
                 },
                 error: function(error) {
                     confirmationModal.style.display = "none";
