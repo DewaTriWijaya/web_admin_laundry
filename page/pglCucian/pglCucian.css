@@ -1,0 +1,59 @@
+.table td,
+.table th {
+  padding: 8px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.table-fixed-header {
+  height: 190px;
+  overflow-y: auto;
+}
+
+.table-fixed-header thead th {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1000;
+}
+
+.modal-header .bi-exclamation-circle-fill {
+  font-size: 1.5rem;
+}
+
+.modal-title {
+  display: flex;
+  align-items: center;
+}
+
+.modal-header-uhuy {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.modal-title-uhuy {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.modal-body {
+  font-size: 1.1rem;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.modal-footer .btn-success {
+  width: 100px;
+}
+
+.modal-header .bi-question-circle-fill,
+.modal-header .bi-exclamation-circle-fill {
+  font-size: 1.5rem;
+}
+.home-uhuy {
+  margin-left: 300px;
+}

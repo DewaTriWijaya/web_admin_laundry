@@ -118,71 +118,8 @@ $result = mysqli_query($conn, $sql);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="page/pglCucian/pglCucian.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <style>
-        .table td,
-        .table th {
-            padding: 8px;
-        }
-
-        .table-wrapper {
-            overflow-x: auto;
-        }
-
-        .table-fixed-header {
-            height: 190px;
-            overflow-y: auto;
-        }
-
-        .table-fixed-header thead th {
-            position: sticky;
-            top: 0;
-            background: white;
-            z-index: 1000;
-        }
-
-        .modal-header .bi-exclamation-circle-fill {
-            font-size: 1.5rem;
-        }
-
-        .modal-title {
-            display: flex;
-            align-items: center;
-        }
-
-
-        .modal-header-uhuy {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .modal-title-uhuy {
-            font-size: 25px;
-            font-weight: bold;
-        }
-
-
-        .modal-body {
-            font-size: 1.1rem;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-
-        .modal-footer .btn-success {
-            width: 100px;
-        }
-
-        .modal-header .bi-question-circle-fill,
-        .modal-header .bi-exclamation-circle-fill {
-            font-size: 1.5rem;
-        }
-        .home-uhuy {
-            margin-left: 300px;
-        }
-    </style>
-    <title>Pengelolaan Cucian</title>
 </head>
 
 <body class="bg-secondary" style="--bs-bg-opacity: .15;">
