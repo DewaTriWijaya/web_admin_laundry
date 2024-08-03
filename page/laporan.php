@@ -162,8 +162,6 @@ if ($result_transactions_per_month) {
  $result_chart = $conn->query($sql_chart);
  $chart_data = $result_chart->fetch_assoc();
   // Akhir Fetch data for pie chart
-
-
 ?>
 
 
@@ -176,6 +174,31 @@ if ($result_transactions_per_month) {
     <link rel="stylesheet" href="page/laporan/laporan.css">
     <link rel="stylesheet" href="laporan/laporan.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+        }
+
+         .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .modal-title {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+    </style>
     <title>Laporan</title>
 </head>
 <body class="bg-secondary" style="--bs-bg-opacity: .15;">
@@ -305,24 +328,38 @@ if ($result_transactions_per_month) {
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="transaksiModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- <div class="modal fade" id="transaksiModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header">
-       <h1 class="bi bi-info-circle modal-title fs-5" id="exampleModalLabel"> Pemberitahuan</h1>
+      <div class="modal-header justify-content-center">
+        <span class="bi bi-info-circle modal-title"> Pemberitahuan</span>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <p class="text-center">Tidak ada transaksi pada periode yang dipilih</p>
       </div>
-      <div class="modal-footer justify-content-center">
-        <button type="button" class="btn btn-success" data-bs-dismiss="modal">Ya</button>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success px-4" data-bs-dismiss="modal">Ya</button>
       </div>
     </div>
   </div>
-</div>
+</div> -->
 <!-- Akhir -->
- 
+
+<div id="transaksiModal" class="modal">
+        <div class="modal-dialog modal-dialog-centered">                           
+            <div class="modal-content">
+                <div class="modal-header justify-content-center">
+                    <span class="bi bi-info-circle modal-title"> Pemberitahuan</span>
+                </div>
+                <p class="text-center">Tidak ada transaksi pada <br>periode yang dipilih</p>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success px-4" data-bs-dismiss="modal">Ya</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 <script>
     
