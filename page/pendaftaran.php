@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <form method="POST" id="customerForm">
                             <div class="form-group">
                                 <label for="name"><b>Nama</b></label>
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Masukan Nama" required>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Masukan Nama" required="" oninvalid="this.setCustomValidity('Tolong isi form ini!')" oninput="setCustomValidity('')>
                             </div>
                             <div class="form-group mt-2">
                                 <label for="phone"><b>Nomor Handphone</b></label>
