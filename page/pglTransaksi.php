@@ -74,6 +74,15 @@ if (isset($_POST['simpan_data_nota'])) {
     $totalHarga = isset($_POST['total_harga_int']) ? intval($_POST['total_harga_int']) : 0;
     $totalBerat = isset($_POST['total_berat']) ? floatval($_POST['total_berat']) : 0.0;
 
+    $rawJson = $_POST['detail_laundry'];
+    $detailLaundry = json_decode($rawJson, true);
+
+    foreach ($detailLaundry as $detail) {
+        $id_jenis_cucian = $detail['jenis_cucian'];
+        $jumlah = $detail['jumlah'];
+        $total_harga = $detail['total_harga'];
+    }
+
     // Validasi di sisi server
     if (empty($noHp) || empty($jenisPembayaran) || empty($tanggalTransaksi) || empty($estimasiSelesai) || $totalHarga <= 0 || $totalBerat <= 0) {
         $errors[] = "Semua field harus diisi dan nilai harus valid.";
@@ -84,8 +93,10 @@ if (isset($_POST['simpan_data_nota'])) {
                   VALUES ('$noNota', '$noHp', '$jenisPembayaran', '$totalBerat', '$tanggalTransaksi', '$estimasiSelesai', '$totalHarga')";
         $query_status = "INSERT INTO statuslaundry (no_nota, status_laundry, tanggal_selesai) 
                          VALUES ('$noNota', 'Belum' , '$estimasiSelesai')";
+        $queryDetail = "INSERT INTO detaillaundry (id_jenis_cucian, no_nota, harga_total_kilo)
+                      VALUES ('$id_jenis_cucian', '$noNota', '$jumlah')";
 
-        if (mysqli_query($conn, $query) && mysqli_query($conn, $query_status)) {
+        if (mysqli_query($conn, $query) && mysqli_query($conn, $query_status) && mysqli_query($conn, $queryDetail)) {
             echo "<script>document.addEventListener('DOMContentLoaded', function() { showAlertModal('Data Berhasil disimpan'); });</script>";
         } else {
             echo "Error: " . $query . "<br>" . mysqli_error($conn);
@@ -146,10 +157,11 @@ if (isset($_POST['simpan_data_nota'])) {
                 </div>
 
                 <!-- Table Jenis Cucian -->
-                <table class="table table-bordered table-striped" id="tabel_cucian">
+                <table class="table table-bordered table-striped" id="tabel_cucian" name="tabel_cucian">
                     <thead class="text-center">
                         <tr>
                             <th scope="col">No</th>
+                            <th scope="col">ID</th>
                             <th scope="col">Jenis Cucian</th>
                             <th scope="col">Jumlah Kilogram</th>
                             <th scope="col">Harga</th>
@@ -218,6 +230,8 @@ if (isset($_POST['simpan_data_nota'])) {
                 </div>
             </div>
 
+            <input type="hidden" id="detail_laundry" name="detail_laundry">
+      
             <div class="d-flex flex-row ms-3">
                 <div class="row me-5">
                     <button type="submit" class="btn btn-success p-2 px-4" name="simpan_data_nota">Simpan</button>
@@ -227,6 +241,8 @@ if (isset($_POST['simpan_data_nota'])) {
                 </div>
             </div>
         </div>
+
+
     </form>
 
     <!-- Add Jenis Cucian Modal -->
@@ -241,14 +257,18 @@ if (isset($_POST['simpan_data_nota'])) {
                     <form method="POST" action="">
                         <div class="form-group">
                             <label for="jenis_cucian">Jenis Cucian:</label>
-                            <select class="form-control" id="jenis_cucian" name="jenis_cucian" required="" oninvalid="this.setCustomValidity('Tolong Pilih Jenis Cucian!')" oninput="setCustomValidity('')">
+                            <select class="form-control" id="jenis_cucian" name="jenis_cucian" required=""
+                                oninvalid="this.setCustomValidity('Tolong Pilih Jenis Cucian!')"
+                                oninput="setCustomValidity('')">
                                 <option value="">Pilih Jenis Cucian</option>
                                 <?= $jenisCucianOptions; ?>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="jumlah">Jumlah Per-Kilogram:</label>
-                            <input type="number" class="form-control" id="jumlah" name="jumlah" required="" oninvalid="this.setCustomValidity('Tolong Isi Jumlah Kilogram !')" oninput="setCustomValidity('')">
+                            <input type="number" class="form-control" id="jumlah" name="jumlah" required=""
+                                oninvalid="this.setCustomValidity('Tolong Isi Jumlah Kilogram !')"
+                                oninput="setCustomValidity('')">
 
                         </div>
                         <div class="modal-footer">
@@ -316,7 +336,27 @@ if (isset($_POST['simpan_data_nota'])) {
         document.getElementById('main_form').addEventListener('submit', function () {
             // Enable the fieldset just before submitting the form
             document.getElementById('field_HargadanBerat').disabled = false;
+
+            updateDetailLaundryInput();
         });
+
+        function updateDetailLaundryInput() {
+            var table = document.getElementById('tabel_cucian').getElementsByTagName('tbody')[0];
+            var tableData = [];
+
+            for (var i = 0, row; row = table.rows[i]; i++) { 
+                var rowData = {
+                    jenis_cucian: row.cells[1].innerText,
+                    jumlah: parseFloat(row.cells[3].innerText),
+                    total_harga: parseFloat(row.cells[4].innerText.replace('Rp ', '').replace(',', ''))
+                };
+                tableData.push(rowData);
+            }
+
+            var jsonString = JSON.stringify(tableData);
+            document.getElementById('detail_laundry').value = jsonString;
+            return true; // Allow form submission
+        }
 
         document.addEventListener('DOMContentLoaded', function () {
             const urlParams = new URLSearchParams(window.location.search);
@@ -368,11 +408,12 @@ if (isset($_POST['simpan_data_nota'])) {
                     var existingJumlah = parseFloat(existingRow.cells[2].innerText);
                     var newJumlah = existingJumlah + jumlahFloat;
                     existingRow.cells[2].innerText = newJumlah;
-                    existingRow.cells[3].innerText = 'Rp ' + (jenisCucian[selectedJenisId] * newJumlah).toLocaleString('id-ID'); 
+                    existingRow.cells[3].innerText = 'Rp ' + (jenisCucian[selectedJenisId] * newJumlah).toLocaleString('id-ID');
                 } else {
                     var newRow = table.insertRow();
                     newRow.innerHTML = `
                     <td>${table.rows.length}</td>
+                    <td>${selectedJenisId}</td>
                     <td>${selectedJenis}</td>
                     <td>${jumlahFloat}</td>
                     <td>Rp ${price.toLocaleString('id-ID')}</td>
@@ -399,8 +440,8 @@ if (isset($_POST['simpan_data_nota'])) {
             let totalWeight = 0;
             var rows = document.querySelectorAll('#tabel_cucian tbody tr');
             rows.forEach(row => {
-                var priceText = row.cells[3].innerText.replace('Rp ', '').replace(/,/g, '');
-                var weightText = row.cells[2].innerText;
+                var priceText = row.cells[4].innerText.replace('Rp ', '').replace(/,/g, '');
+                var weightText = row.cells[3].innerText;
                 var price = parseFloat(priceText);
                 var weight = parseFloat(weightText);
 
