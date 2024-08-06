@@ -1,5 +1,5 @@
 <?php
-include "koneksi.php";
+include "../koneksi.php";
 
 function generateId($jenisCucian)
 {
@@ -120,12 +120,72 @@ $result = mysqli_query($conn, $sql);
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="page/pglCucian/pglCucian.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: poppins;
+        }
+        .sidebar {
+            width: 380px;
+        }
+
+        .bg-active {
+            background-color: #0086ac;
+        }
+    </style>
+    <title>Cucian</title>
 </head>
 
 <body class="bg-secondary" style="--bs-bg-opacity: .15;">
-    <div class="container vh-100 home-uhuy">
+
+<!-- awal -->
+<div class="d-flex">
+        <div class="p-4 bg-custom sidebar">
+            <div class="d-flex gap-4">
+                <img src="../img/Logo.png" alt="logo" class="w-25 h-25">
+                <div class="text-white align-self-center">
+                    <h1 class="fs-5">Admin</h1>
+                    <p class="lh-1">Sistem Laundry</p>
+                </div>
+            </div>
+            <div class="mt-5" >
+                <div class="side-menu" onclick="window.location.href='../index.php'">
+                    <img src="../img/user.png" alt="pendaftaran">
+                    <a class="text-white" href="../index.php" style="text-decoration:none">Pendaftaran</a>
+                </div>
+
+                <div class="side-menu" onclick="window.location.href='pglTransaksi.php'">
+                    <img src="../img/tag.png" alt="transaksi">
+                    <a class="text-white" href="pglTransaksi.php" style="text-decoration:none">Pengelolaan Transaksi</a>
+                </div>
+
+                <div class="side-menu bg-active" onclick="window.location.href='/pglCucian.php'">
+                    <img src="../img/washing.png" alt="cucian">
+                    <a class="text-white" href="pglCucian.php" style="text-decoration:none">Pengelolaan Cucian</a>
+                </div>
+
+                <div class="side-menu" onclick="window.location.href='laporan.php'">
+                    <img src="../img/bar-chart.png" alt="laporan">
+                    <a class="text-white" href="laporan.php" style="text-decoration:none">Laporan</a>
+                </div>
+
+                <div class="side-menu" onclick="window.location.href='statusLaundry.php'">
+                    <img src="../img/bell.png" alt="status">
+                    <a class="text-white" href="statusLaundry.php" style="text-decoration:none">Status Laundry</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-3 d-flex w-100">
+<!-- akhir -->
+    <div class="container vh-100 p-4">
         <h2 class="fw-bold mb-3">Pengelolaan Cucian</h2>
-        <h5 class="card-title mb-2">Daftar Jenis Cucian</h5>
+        <h5 class="card-title mb-2 mt-4">Daftar Jenis Cucian</h5>
 
         <!-- Tabel Jenis Cucian -->
         <div class="table-wrapper card">
@@ -267,7 +327,8 @@ $result = mysqli_query($conn, $sql);
                 </div>
             </div>
         </div>
-
+    </div>
+    </div>
     </div>
 
     <script src="../js/bootstrap.bundle.min.js"></script>

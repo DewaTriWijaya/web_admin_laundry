@@ -13,9 +13,6 @@
   margin-bottom: 10px;
 }
 
-.modal-footer .btn-success {
-  width: 100px;
-}
 
 .modal-header .bi-question-circle-fill,
 .modal-header .bi-exclamation-circle-fill {
@@ -49,6 +46,3 @@
   z-index: 1000;
 }
 
-.home-uhuy {
-  margin-left: 300px;
-}

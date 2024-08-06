@@ -3,7 +3,6 @@
 }
 
 .chart-container {
-    position: relative;
     height: 250px;
 }
 
@@ -37,7 +36,6 @@
 }
 
 .chart-item-uhuy .chart-text {
-    position: absolute;
     text-align: center;
 }
 
@@ -97,13 +95,11 @@
 /* Chart container styling */
 .chart-container,
 .chart-container-uhuy {
-    position: relative;
     height: 100%;
 }
 
 /* Chart item styling */
 .chart-item-uhuy {
-    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -111,7 +107,6 @@
 
 /* Chart text styling */
 .chart-text {
-    position: absolute;
     text-align: center;
 }
 
@@ -126,27 +121,20 @@
 
 .table-fixed-header {
     height: 450px;
-    overflow-y: auto;
 }
 
 .table-fixed-header thead th {
-    position: sticky;
-    top: 0;
     background: white;
-    z-index: 1000;
-}
-.home-uhuy {
-    margin-left: 300px;
 }
 
 
 
 
-@media (min-width: 1400px){ 
+/* @media (min-width: 1400px){ 
     .resf {
         margin-left: 200px; 
       }
- }
+ } */
 
 .modal-header-uhuy {
     display: flex;

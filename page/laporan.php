@@ -1,5 +1,5 @@
 <?php
-include "koneksi.php";
+include "../koneksi.php";
 $result = null; // Inisialisasi variabel $result
 
 // Mencari Data
@@ -173,6 +173,12 @@ if ($result_transactions_per_month) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="page/laporan/laporan.css">
     <link rel="stylesheet" href="laporan/laporan.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .modal {
@@ -198,11 +204,62 @@ if ($result_transactions_per_month) {
             gap: 10px;
         }
 
+        body {
+            font-family: poppins;
+        }
+        .sidebar {
+            width: 380px;
+        }
+
+        .bg-active {
+            background-color: #0086ac;
+        }
+
     </style>
     <title>Laporan</title>
 </head>
 <body class="bg-secondary" style="--bs-bg-opacity: .15;">
-<div class="container vh-100 home-uhuy">
+<!-- awal -->
+<div class="d-flex">
+        <div class="p-4 bg-custom sidebar">
+            <div class="d-flex gap-4">
+                <img src="../img/Logo.png" alt="logo" class="w-25 h-25">
+                <div class="text-white align-self-center">
+                    <h1 class="fs-5">Admin</h1>
+                    <p class="lh-1">Sistem Laundry</p>
+                </div>
+            </div>
+            <div class="mt-5" >
+                <div class="side-menu" onclick="window.location.href='../index.php'">
+                    <img src="../img/user.png" alt="pendaftaran">
+                    <a class="text-white" href="index.php" style="text-decoration:none">Pendaftaran</a>
+                </div>
+
+                <div class="side-menu" onclick="window.location.href='pglTransaksi.php'">
+                    <img src="../img/tag.png" alt="transaksi">
+                    <a class="text-white" href="pglTransaksi.php" style="text-decoration:none">Pengelolaan Transaksi</a>
+                </div>
+
+                <div class="side-menu" onclick="window.location.href='pglCucian.php'">
+                    <img src="../img/washing.png" alt="cucian">
+                    <a class="text-white" href="pglCucian.php" style="text-decoration:none">Pengelolaan Cucian</a>
+                </div>
+
+                <div class="side-menu bg-active" onclick="window.location.href='laporan.php'">
+                    <img src="../img/bar-chart.png" alt="laporan">
+                    <a class="text-white" href="laporan.php" style="text-decoration:none">Laporan</a>
+                </div>
+
+                <div class="side-menu" onclick="window.location.href='statusLaundry.php'">
+                    <img src="../img/bell.png" alt="status">
+                    <a class="text-white" href="statusLaundry.php" style="text-decoration:none">Status Laundry</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-3 d-flex w-100">
+<!-- akhir -->
+<div class="container p-4">
     <div class="row resf">
         <h2 class="fw-bold mb-5">Laporan Laundry</h2>
 
@@ -260,7 +317,6 @@ if ($result_transactions_per_month) {
                             <div class="chart-item-uhuy">
                                 <canvas id="doughnutChart"></canvas>
                                 <div class="chart-text">
-                                    <h2 id="percentage">0%</h2>
                                 </div>
                             </div>
                         </div>
@@ -359,7 +415,8 @@ if ($result_transactions_per_month) {
             </div>
         </div>
     </div>
-
+</div>
+</div>
 
 <script>
     
