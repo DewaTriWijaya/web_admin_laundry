@@ -50,8 +50,4 @@ git commit -m "pesan Perubahan yang ditambahkan"
 git push -u origin Namabranch
 ```
 
-# Halaman
-
-### Home
-![image](https://github.com/user-attachments/assets/82753a86-b641-4606-a603-94108506a53f)
 
